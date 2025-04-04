@@ -28,13 +28,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="bg-gray-100 min-h-screen grid grid-cols-12 gap-4 lg:gap-8">
+        <div className="bg-gray-100 text-black min-h-screen grid grid-cols-12 gap-4 lg:gap-8">
           <nav className="col-span-2 flex flex-col gap-y-8 px-4 py-8">
             <Link href={"/create-force"}>Create force</Link>
             {/* <Link href={"/login"}>Login</Link> */}
           </nav>
 
-          <section className="col-span-12 py-8 px-4">
+          <section className="col-span-10 py-8 px-4">
             <h1 className="text-4xl">Crusade Tracker</h1>
             <div className="pt-8">{children}</div>
           </section>

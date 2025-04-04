@@ -7,7 +7,13 @@ export default function Home() {
 
   return (
     <>
-      <h2>Web app built to create and track 40k crusade forces</h2>
+      <Field>
+        <Label>Crusade Force Name</Label>
+        <Description>
+          Type your crusade force name, then click continue to begin building.
+        </Description>
+        <Input className={"border border-black"} />
+      </Field>
     </>
   );
 }
