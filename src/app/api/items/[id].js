@@ -27,18 +27,13 @@ export default async function handler(req, res) {
       }
       break;
 
-    case "POST":
-      try {
-        const item = Item.create(req.body);
-        res.status(201).json({ success: true, data: item });
-      } catch (error) {
-        res.status(400).json({ success: false });
-      }
-      break;
-
     case "DELETE":
       try {
         const deleteItem = Item.deleteOne({ _id: id });
+        if (!deleteItem) {
+          return res.status(400).json({ success: false });
+        }
+        res.status(200).json({ success: true, data: {} });
       } catch (error) {
         res.status(400).json({ success: false });
       }

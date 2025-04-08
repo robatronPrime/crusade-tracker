@@ -1,0 +1,8 @@
+#File name: .prettierrc.yml
+#Save in root of projects
+#configure formatting to use prettier
+semi: true
+tabWidth: 2
+printWidth: 120
+singleQuote: false
+trailingComma: none

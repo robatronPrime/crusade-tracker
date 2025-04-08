@@ -19,6 +19,27 @@ declare global {
       SECRET: string;
     }
   }
+  // interface force {
+  //   [{
+  //     _id: ObjectId,
+  //     id: number,
+  //     name: string,
+  //     supplyLimit: number,
+  //     supplyUsed: number,
+  //     battleTally: number,
+  //     victories: number,
+  //     requisitionPoints: number,
+  //     units: [
+  //       {
+  //         id: number,
+  //         name: string,
+  //         pointsValue: number,
+  //         crusadePoints: number
+  //       }
+  //     ],
+  //     recordOfAchivement: Array<string>
+  //   }];
+  // }
 }
 
 // If this file has no import/export statements (i.e. is a script)

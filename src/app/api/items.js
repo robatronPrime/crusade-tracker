@@ -4,6 +4,8 @@ import Item from "../../../models/Item";
 export default async function handler(req, res) {
   await dbConnect();
 
+  console.log("dbConnected");
+
   const { method } = req;
 
   switch (method) {
