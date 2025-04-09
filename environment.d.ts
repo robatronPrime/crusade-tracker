@@ -17,6 +17,8 @@ declare global {
       TWITTER_ID: string;
       TWITTER_SECRET: string;
       SECRET: string;
+      MONGODB: string;
+      MONGODB_URI: string;
     }
   }
   // interface force {
