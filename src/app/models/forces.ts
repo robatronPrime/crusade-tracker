@@ -1,7 +1,6 @@
-import mongoose, { Document, ObjectId, Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-export interface IForce extends Document {
-    _id: ObjectId,
+export interface Forces extends Document {
     id: number,
     name: string,
     supplyLimit: number,
@@ -17,14 +16,10 @@ export interface IForce extends Document {
         crusadePoints: number
         }
     ],
-    recordOfAchivement: Array<string>
+    recordOfAchivement: []
 }
 
-const forceSchema:Schema = new mongoose.Schema({
-    __id: {
-        type: Number,
-        required: true
-    },
+const forceSchema:Schema = new mongoose.Schema<Forces>({
     id: {
         type: Number,
         required: true
@@ -71,10 +66,8 @@ const forceSchema:Schema = new mongoose.Schema({
         }
     ],
     recordOfAchivement: {
-        type: Array<string>,
+        type: [],
     },
 });
 
-const Force = mongoose.model<IForce>('Force', forceSchema);
-
-export default Force;
+export default mongoose.models.Force || mongoose.model<Forces>("Force", forceSchema);
