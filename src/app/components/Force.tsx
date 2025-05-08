@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from "react";
 import { Forces } from "../models/forces";
+import Link from "next/link";
 
 interface ForceProps {
   data: Forces[];
@@ -21,11 +22,7 @@ const Force: React.FC<ForceProps> = ({ data }) => {
     <>
       <div className="fixed bottom-8 right-8">
         <div className="flex justify-end bg-gray-950 text-white p-4 rounded-full">
-          {!editMode ? (
-            <button className="cursor-pointer" onClick={enterEditMode}>Edit</button>
-          ) : (
-            <button className="cursor-pointer" onClick={saveEdit}>Save</button>
-          )}
+          <Link className="cursor-pointer" href={"/createForce"}>Edit</Link>
         </div>
       </div>
       {data.map((force) => (
