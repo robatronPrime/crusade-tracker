@@ -28,7 +28,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <header className="flex justify-end items-center p-4 gap-4 h-16 bg-gray-100">
+          <header className="flex justify-end items-center p-4 gap-4 h-16 bg-gray-100 text-black">
             <SignedOut>
               <SignInButton />
               <SignUpButton />
@@ -38,16 +38,16 @@ export default function RootLayout({
             </SignedIn>
 
             <nav className="col-span-2 flex flex-col gap-y-8 px-4 py-8">
-              <Link href={"/create-force"}>Create force</Link>
+              <Link href={"/forces"}>Order of Battle</Link>
               {/* <Link href={"/login"}>Login</Link> */}
             </nav>
           </header>
-          <div className="bg-gray-100 text-black min-h-screen grid grid-cols-12 gap-4 lg:gap-8">
-            <section className="col-span-10 py-8 px-4">
-              <h1 className="text-4xl">Crusade Tracker</h1>
-              <div className="pt-8">{children}</div>
-            </section>
-          </div>
+          <section className="bg-gray-100 text-black grid grid-cols-12 gap-4 lg:gap-8 px-4 lg:px-8">
+              <div className="col-span-12">
+                <h1 className="text-4xl">Crusade Tracker</h1>
+              </div>
+              <div className="pt-8 col-span-12 min-h-screen">{children}</div>
+          </section>
         </body>
       </html>
     </ClerkProvider>

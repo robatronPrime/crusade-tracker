@@ -1,42 +1,81 @@
-import { getForces } from "../actions";
+import { Forces, Forces } from "../models/forces";
 
-export default async function Home() {
-  const fetchForces = await getForces();
+export default async function Forces() {
+  const response = await fetch("http://localhost:5050/forces");
+  const data = await response.json();
+  console.log(data);
   
- console.log(fetchForces);
 
- const { MongoClient, ServerApiVersion } = require('mongodb');
- const uri = process.env.MONGODB_URI;
- // Create a MongoClient with a MongoClientOptions object to set the Stable API version
- const client = new MongoClient(uri, {
-   serverApi: {
-     version: ServerApiVersion.v1,
-     strict: true,
-     deprecationErrors: true,
-   }
- });
- async function run() {
-   try {
-     // Connect the client to the server	(optional starting in v4.7)
-     await client.connect();
-     // Send a ping to confirm a successful connection
-     await client.db("admin").command({ ping: 1 });
-     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-   } finally {
-     // Ensures that the client will close when you finish/error
-     await client.close();
-   }
- }
- run().catch(console.dir);
- 
   return (
     <>
-      <h2>Forces</h2>
-      {/* {forces.map(force => (
-        <div key={force.id}>
-          <h3>{force.name}</h3>
+      {data.map((force : Forces) => (
+        <div key={force.id} className="grid grid-cols-12 gap-4 lg:gap-8">
+          <div className="col-span-5 py-4">
+            <h2 className="text-2xl">{force.name}</h2>
+            <div className="w-full h-0.5 bg-black opacity-35"></div>
+            <h3 className="">Crusade force</h3>
+
+            <div className="w-full flex justify-between mt-4">
+              <div>
+                <p>{force.supplyLimit}</p>
+                <p>Supply Limit</p>
+              </div>
+
+              <div>
+                <p>{force.supplyUsed}</p>
+                <p>Supply Used</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-7 flex justify-around gap-4">
+            <div className="flex flex-col gap-4 justify-center text-center">
+              <p>Battle Tally</p>
+              <p>{force.battleTally}</p>
+            </div>
+            <div className="flex flex-col gap-4 justify-center text-center">
+              <p>Victories</p>
+              <p>{force.victories}</p>
+            </div>
+            <div className="flex flex-col gap-4 justify-center text-center">
+              <p>Requesition Points</p>
+              <p>{force.requisitionPoints}</p>
+            </div>
+          </div>
+
+          <div className="col-span-10 grid grid-cols-12 gap-4">
+            <div className="col-span-6 flex items-end">
+              <p>Unit Name</p>
+            </div>
+            <div className="col-span-2 text-center flex justify-center items-end">
+              <p>Points Value</p>
+            </div>
+            <div className="col-span-2 text-center flex justify-center items-end">
+              <p>Number of Models</p>
+            </div>
+            <div className="col-span-2 text-center flex justify-center items-end">
+              <p>Crusade Points</p>
+            </div>
+
+            {force.units.map((unit, idx) => (
+              <div key={unit.id} className="col-span-12 grid grid-cols-12 gap-4 w-full">
+                <div className="col-span-6 flex items-end">
+                  <p>{unit.name}</p>
+                </div>
+                <div className="col-span-2 text-center flex justify-center items-end">
+                  <p>{unit.crusadePoints}</p>
+                </div>
+                <div className="col-span-2 text-center flex justify-center items-end">
+                  <p>{unit.modelCount}</p>
+                </div>
+                <div className="col-span-2 text-center flex justify-center items-end">
+                  <p>{unit.crusadePoints}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      ))} */}
+      ))}
     </>
   );
 }

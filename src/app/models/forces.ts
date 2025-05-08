@@ -10,6 +10,7 @@ export interface Forces extends Document {
     requisitionPoints: number,
     units: [
         {
+        modelCount: number;
         id: number,
         name: string,
         pointsValue: number,
@@ -61,6 +62,9 @@ const forceSchema:Schema = new mongoose.Schema<Forces>({
             required: true
         },
         crusadePoints: {
+            type: Number,
+        },
+        modelCount: {
             type: Number,
         },
         }
