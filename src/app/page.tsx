@@ -1,7 +1,10 @@
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { auth, currentUser } from '@clerk/nextjs/server'
 
-export default function Home() {
+export default async function Home() {
+  const { userId } = await auth()
+
   return (
     <div className="flex justify-center items-center flex-col text-center h-full">
       <h1 className="text-4xl">Crusade Tracker</h1>
@@ -12,10 +15,11 @@ export default function Home() {
           <SignInButton />
           <SignUpButton />
         </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-        <Link href={"/forces"}>Order of Battle</Link>
+        {userId ? (
+          <Link href={"/forces"}>Order of Battle</Link>
+        ) : (
+          <p>Sign in to access your Orders of battle</p>
+        )}
       </nav>
     </div>
   );
