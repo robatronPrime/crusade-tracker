@@ -1,6 +1,6 @@
 import React from "react";
-import { Forces } from "../models/forces";
-import ForceForm from "../components/ForceForm";
+import { Forces } from "@/models/forces";
+import ForceForm from "@/components/ForceForm";
 
 export default async function EditForcePage() {
   const res = await fetch(`${process.env.API_URL}/forces`, {next: { revalidate: 60 },});
@@ -11,8 +11,6 @@ export default async function EditForcePage() {
 
   const data: Forces[] = (await res.json()) as Forces[];
 
-  return <ForceForm force={undefined} onSubmit={function (payload: Partial<Forces>): Promise<void> {
-    throw new Error("Function not implemented.");
-  } } />;
+  return <ForceForm />;
 }
 

@@ -1,4 +1,4 @@
-import { Forces } from "../models/forces";
+import { Forces } from "@/models/forces";
 
 interface ForceFormProps {
   force: Forces;                           // pre‑filled data

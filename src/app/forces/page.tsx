@@ -1,6 +1,6 @@
 import React from "react";
-import Force from "../components/Force";
-import { Forces } from "../models/forces";
+import Force from "@/components/Force";
+import { Forces } from "@/models/forces";
 
 export default async function ForcesPage() {
   const res = await fetch(`${process.env.API_URL}/forces`, {next: { revalidate: 60 },});
