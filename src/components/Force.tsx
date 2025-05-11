@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Forces } from "@/models/forces";
 import Link from "next/link";
 import { Disclosure, DisclosureButton, DisclosurePanel, Transition } from "@headlessui/react";
+import Image from "next/image";
+import arrowBigRightOutline from "/public/outline/arrow-big-right.svg"
 
 interface ForceProps {
   data: Forces[];
@@ -75,7 +77,7 @@ const Force: React.FC<ForceProps> = ({ data }) => {
                       </div>
                     </div>
 
-                    <div className="col-span-10 grid grid-cols-12 gap-4">
+                    <div className="col-span-10 grid grid-cols-12 gap-4 my-8">
                       {/* ── Unit rows ──────────────────────────────── */}
                       <p className="">Units</p>
                       {force.units.map((unit, idx) => (
@@ -83,19 +85,21 @@ const Force: React.FC<ForceProps> = ({ data }) => {
                           key={unit.id}
                           className="col-span-12 grid grid-cols-12 gap-4 w-full"
                         >
-                          <div className="col-span-6 flex items-end">
+                          <div className="col-span-8 flex items-end">
                             <p>{unit.name}</p>
                           </div>
-                          <div className="col-span-2 text-center flex justify-center items-end">
+                          <div className="col-span-1 text-center flex justify-center items-end">
                             <p>{unit.pointsValue}</p>
                           </div>
-                          <div className="col-span-2 text-center flex justify-center items-end">
+                          <div className="col-span-1 text-center flex justify-center items-end">
                             <p>{unit.modelCount}</p>
                           </div>
-                          <div className="col-span-2 text-center flex justify-center items-end">
+                          <div className=" text-center flex justify-center items-end">
                             <p>{unit.crusadePoints}</p>
                           </div>
-                          <Link className="col-span-12" href={""}>Unit details</Link>
+                          <Link className="col-span-1" href={""}>
+                            <Image src={arrowBigRightOutline} alt="arrow right" width="20" height="20" />
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -103,7 +107,10 @@ const Force: React.FC<ForceProps> = ({ data }) => {
                     {/* ── Record of Achievement Column ──────────────────────────────── */}
                     <div className="col-span-2 flex flex-col">
                       <p>Record of Achievement</p>
-                      {force.recordOfAchivement.map(achievement => (
+                      {force.recordOfAchievement.length == 0 ? (
+                        <p>No records</p>
+                      ) : ""}
+                      {force.recordOfAchievement?.map(achievement => (
                         <p>{achievement}</p>
                       ))}
                     </div>

@@ -39,7 +39,7 @@ declare global {
   //         crusadePoints: number
   //       }
   //     ],
-  //     recordOfAchivement: Array<string>
+  //     recordOfAchievemnet: Array<string>
   //   }];
   // }
 }

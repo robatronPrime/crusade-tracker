@@ -17,7 +17,7 @@ export interface Forces extends Document {
         crusadePoints: number
         }
     ],
-    recordOfAchivement: []
+    recordOfAchievement: []
 }
 
 const forceSchema:Schema = new mongoose.Schema<Forces>({
@@ -69,7 +69,7 @@ const forceSchema:Schema = new mongoose.Schema<Forces>({
         },
         }
     ],
-    recordOfAchivement: {
+    recordOfAchievement: {
         type: [],
     },
 });
