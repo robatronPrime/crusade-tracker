@@ -3,13 +3,21 @@ import { Forces } from "@/models/forces";
 
 export default async function ForcesPage() {
   // add try catch
-  const res = await fetch(`${process.env.API_URL}/forces`, { next: { revalidate: 60 } });
+  const getForces = async () => {
+    try {
+      const res = await fetch(`${process.env.API_URL}/forces`, { next: { revalidate: 60 } });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch forces (status: ${res.status})`);
-  }
+      if (!res.ok) {
+        throw new Error(`Failed to fetch forces (status: ${res.status})`);
+      }
 
-  const data = (await res.json()) as Forces[];
+      return await res.json();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const data = (await getForces()) as Forces[];
 
   return <Force data={data} />;
 }
