@@ -1,9 +1,8 @@
+import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,18 +26,20 @@ export default async function RootLayout({
 }>) {
   const user = await currentUser();
 
+  // Create user in DB
+
   return (
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <header className="flex justify-end bg-gray-100 p-4 text-black gap-4">
-            <p>Welcome, {user.firstName}</p>
             <SignedIn>
+              <p>Welcome, {user?.firstName}</p>
               <UserButton />
             </SignedIn>
           </header>
           <section className="bg-gray-100 text-black grid grid-cols-12 gap-4 lg:gap-8 px-4 lg:px-8">
-              <div className="pt-8 col-span-12 min-h-screen">{children}</div>
+            <div className="pt-8 col-span-12 min-h-screen">{children}</div>
           </section>
         </body>
       </html>
