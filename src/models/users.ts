@@ -1,16 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { User } from "../../types/global";
 
-export interface Users extends Document {
-  clerkID: string;
-  userName: string;
-  forces: [
-    {
-      forceRef: number;
-    }
-  ];
-}
-
-const userSchema: Schema = new mongoose.Schema<Users>({
+const userSchema: Schema = new mongoose.Schema<User>({
   clerkID: {
     type: String,
     required: true
@@ -28,4 +19,4 @@ const userSchema: Schema = new mongoose.Schema<Users>({
   ]
 });
 
-export default mongoose.models.User || mongoose.model<Users>("User", userSchema);
+export default mongoose.models.User || mongoose.model<User>("User", userSchema);

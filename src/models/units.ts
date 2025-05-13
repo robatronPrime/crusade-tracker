@@ -1,47 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { Unit } from "../../types/global";
 
-export interface Units extends Document {
-  modelCount: number;
-  id: number;
-  name: string;
-  pointsValue: number;
-  crusadePoints: number;
-  type: string;
-  battlesPlayed: number;
-  battlesSurvived: number;
-  enemyUnitsDestroyed: number;
-  xp: number;
-  wargear: [
-    {
-      name: string;
-      id: number;
-      desc: string;
-    }
-  ];
-  enhancements: [
-    {
-      name: string;
-      id: number;
-      desc: string;
-    }
-  ];
-  battleHonours: [
-    {
-      name: string;
-      id: number;
-      desc: string;
-    }
-  ];
-  battleScars: [
-    {
-      name: string;
-      id: number;
-      desc: string;
-    }
-  ];
-}
-
-const unitSchema: Schema = new mongoose.Schema<Units>({
+const unitSchema: Schema = new mongoose.Schema<Unit>({
   modelCount: {
     type: Number,
     required: true
@@ -129,4 +89,4 @@ const unitSchema: Schema = new mongoose.Schema<Units>({
   ]
 });
 
-export default mongoose.models.Unit || mongoose.model<Units>("Unit", unitSchema);
+export default mongoose.models.Unit || mongoose.model<Unit>("Unit", unitSchema);

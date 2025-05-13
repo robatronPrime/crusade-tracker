@@ -1,26 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { Force } from "../../types/global";
 
-export interface Forces extends Document {
-  id: number;
-  name: string;
-  supplyLimit: number;
-  supplyUsed: number;
-  battleTally: number;
-  victories: number;
-  requisitionPoints: number;
-  units: [
-    {
-      modelCount: number;
-      id: number;
-      name: string;
-      pointsValue: number;
-      crusadePoints: number;
-    }
-  ];
-  recordOfAchievement: [];
-}
-
-const forceSchema: Schema = new mongoose.Schema<Forces>({
+const forceSchema: Schema = new mongoose.Schema<Force>({
   id: {
     type: Number,
     required: true
@@ -74,4 +55,4 @@ const forceSchema: Schema = new mongoose.Schema<Forces>({
   }
 });
 
-export default mongoose.models.Force || mongoose.model<Forces>("Force", forceSchema);
+export default mongoose.models.Force || mongoose.model<Force>("Force", forceSchema);

@@ -27,30 +27,30 @@ export default async function RootLayout({
   const user = await currentUser();
 
   // Create user in DB
-  if (user) {
-    try {
-      const getRes = await fetch(`${process.env.API_URL}/users/${user.id}`);
-      console.log(getRes.status);
+  // if (user) {
+  //   try {
+  //     const getRes = await fetch(`${process.env.API_URL}/users/${user.id}`);
+  //     console.log(getRes.status);
 
-      if (getRes.status !== 404) {
-        const addRes = await fetch(`${process.env.API_URL}/users`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json"
-          },
-          body: JSON.stringify({
-            clerkID: user.id,
-            userName: user.username,
-            forces: []
-          })
-        }).then((resp) => resp.json());
+  //     if (getRes.status !== 404) {
+  //       const addRes = await fetch(`${process.env.API_URL}/users`, {
+  //         method: "POST",
+  //         headers: {
+  //           "content-type": "application/json"
+  //         },
+  //         body: JSON.stringify({
+  //           clerkID: user.id,
+  //           userName: user.username,
+  //           forces: []
+  //         })
+  //       }).then((resp) => resp.json());
 
-        console.log(addRes);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //       console.log(addRes);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   return (
     <ClerkProvider>
