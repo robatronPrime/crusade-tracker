@@ -1,16 +1,15 @@
+import ForceTab from "@/components/ForceTab";
 import { Force } from "../../../types/global";
 
 export default async function ForcesPage() {
   // add try catch
   const getForces = async () => {
     try {
-      const res = await fetch(`${process.env.LOCALHOST}/forces`, { next: { revalidate: 60 } });
+      const res = await fetch(`${process.env.LOCALHOST}/api/forces`);
 
       if (!res.ok) {
-        throw new Error(`Failed to fetch forces (status: ${res.status})`);
+        console.log(`Failed to fetch forces (status: ${res.status})`);
       }
-
-      console.log(await res.json());
 
       return await res.json();
     } catch (error) {
@@ -20,6 +19,5 @@ export default async function ForcesPage() {
 
   const data = (await getForces()) as Force[];
 
-  return <></>;
-  // return <Force data={data} />;
+  return <ForceTab data={data} />;
 }

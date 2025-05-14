@@ -1,18 +1,25 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
   try {
-    const response = await fetch(`${process.env.API_URL}/forces`, { next: { revalidate: 60 } });
+    const response = await fetch(`${process.env.API_URL}/forces`, {
+      next: { revalidate: 60 },
+    });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch forces (status: ${response.status})`);
+      return new Response(JSON.stringify({ error: "Upstream API error" }), {
+        status: 500,
+      });
     }
 
     const data = await response.json();
 
-    res.status(200).send(JSON.parse(data));
+    return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+    });
   }
 }
+
