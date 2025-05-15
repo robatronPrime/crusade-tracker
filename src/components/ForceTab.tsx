@@ -31,40 +31,40 @@ const ForceTab: React.FC<ForceProps> = ({ data }) => {
       {data
         ? data.map((force) => (
             <div key={force.id} className="grid grid-cols-12 gap-4 lg:gap-8 my-8">
-              {/* ── Force header ─────────────────────────────── */}
-              <div
-                className={`col-span-12 py-4 flex justify-around flex-col gap-4 bg-gray-300 opacity-80 rounded-2xl transition-opacity text-start px-4`}
-              >
-                <div>
-                  <h2 className="lg:text-3xl">{force.name}</h2>
-                  <h3 className="lg:text-2xl">Crusade force</h3>
-                </div>
+              <Link className="col-span-12" href={`/force/${force.id}`}>
+                <div
+                  className={`flex justify-between gap-4 py-4 px-4 bg-gray-300 opacity-80 rounded-2xl transition-opacity text-start `}
+                >
+                  <div>
+                    <h2 className="lg:text-3xl font-bold">{force.name}</h2>
 
-                <div className="flex flex-row-reverse justify-end gap-4 lg:w-60 bg-gray-50 px-2 rounded-sm text-xs lg:text-base">
-                  <p>{force.supplyLimit}</p>
-                  <p>Supply Limit</p>
-                </div>
+                    <div className="flex justify-between gap-4 lg:w-60 my-4 text-xs lg:text-base">
+                      <p className="font-bold">Supply Limit</p>
+                      <p>{force.supplyLimit}</p>
+                    </div>
 
-                <div className="flex flex-row-reverse justify-end gap-4 lg:w-60 bg-gray-50 px-2 rounded-sm text-xs lg:text-base">
-                  <p>{force.supplyUsed}</p>
-                  <p>Supply Used</p>
-                </div>
+                    <div className="flex justify-between gap-4 lg:w-60 text-xs lg:text-base">
+                      <p className="font-bold">Supply Used</p>
+                      <p>{force.supplyUsed}</p>
+                    </div>
+                  </div>
 
-                <div className="col-span-7 flex justify-around gap-4 mb-4 flex-wrap">
-                  <div className="flex gap-4 items-center">
-                    <p className="font-bold">Battle Tally</p>
-                    <p>{force.battleTally}</p>
-                  </div>
-                  <div className="flex gap-4 items-center">
-                    <p className="font-bold">Victories</p>
-                    <p>{force.victories}</p>
-                  </div>
-                  <div className="flex gap-4 items-center">
-                    <p className="font-bold">Requisition Points</p>
-                    <p>{force.requisitionPoints}</p>
+                  <div className="flex flex-col gap-4 justify-center">
+                    <div className="flex gap-4 items-center justify-between text-xs lg:text-base">
+                      <p className="font-bold">Battle Tally</p>
+                      <p>{force.battleTally}</p>
+                    </div>
+                    <div className="flex gap-4 items-center justify-between text-xs lg:text-base">
+                      <p className="font-bold">Victories</p>
+                      <p>{force.victories}</p>
+                    </div>
+                    <div className="flex gap-4 items-center justify-between text-xs lg:text-base">
+                      <p className="font-bold">Requisition Points</p>
+                      <p>{force.requisitionPoints}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           ))
         : ""}
