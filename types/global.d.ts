@@ -54,3 +54,10 @@ export interface User extends Document {
   userName: string;
   forces: UserForceRef[];
 }
+
+type apiResponse = {
+  data: any;
+  ok: boolean;
+  status: number;
+  error: string;
+};
