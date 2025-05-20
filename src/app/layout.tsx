@@ -29,7 +29,7 @@ export default async function RootLayout({
   // Create user in DB
   if (user) {
     try {
-      const addRes = await fetch(`${process.env.LOCALHOST}/api/users`, {
+      const res = await fetch(`${process.env.LOCALHOST}/api/users`, {
         method: "POST",
         headers: {
           "content-type": "application/json"
@@ -38,9 +38,9 @@ export default async function RootLayout({
           clerkID: user.id,
           forces: []
         })
-      }).then((resp) => resp.json());
+      });
 
-      console.log(addRes);
+      const data = await res.json();
     } catch (error) {
       console.error(error);
     }

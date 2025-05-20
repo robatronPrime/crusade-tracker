@@ -1,4 +1,10 @@
+import { ObjectId } from "mongoose";
 import { NextRequest } from "next/server";
+
+interface UserRequestBody {
+  clerkID: string;
+  forces: ObjectId[];
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -23,9 +29,8 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<{ clerkID: string; forces: [] }> }) {
-  const clerkID = (await params).clerkID;
-  const forces = (await params).forces;
+export async function POST(req: NextRequest) {
+  const { clerkID, forces }: UserRequestBody = await req.json();
 
   try {
     const response = await fetch(`${process.env.API_URL}/users`, {

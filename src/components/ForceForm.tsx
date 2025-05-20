@@ -1,35 +1,45 @@
-import { Forces } from "@/models/forces";
+"use client";
 
-interface ForceFormProps {
-  force: Forces;                           // pre‑filled data
-  onSubmit: (payload: Partial<Forces>) => Promise<void>;
-}
+import { createForce } from "@/app/actions";
+import { Force } from "../../types/global";
+import { useState } from "react";
 
-export default function ForceForm({ force, onSubmit }: ForceFormProps) {
-  
+const ForceForm: React.FC = () => {
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setName(value);
+    setId(slugify(value));
+  };
+
+  const slugify = (text: string): string => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/--+/g, "-");
+  };
+
   return (
-    <form
-      action={async (formData) => {
-        await onSubmit({
-          name: formData.get("name") as string,
-          supplyLimit: Number(formData.get("supplyLimit")),
-          // grab the rest…
-        });
-      }}
-      className="grid gap-4"
-    >
+    <form action={createForce} className="grid gap-4">
       <label className="block">
         Name
-        <input
-          name="name"
-          defaultValue={force.name}
-          className="input"
-        />
+        <input name="name" className="input" value={name} onChange={handleOnChange} />
       </label>
-      {/* repeat for tally, units, etc. */}
+      <label className="block">
+        Supply Limit
+        <input name="supplyLimit" type="number" className="input" />
+      </label>
+      <input type="hidden" name="id" value={id} />
+
       <button type="submit" className="btn-primary">
         Save
       </button>
     </form>
   );
-}
+};
+
+export default ForceForm;

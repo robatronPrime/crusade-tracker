@@ -11,7 +11,7 @@ export interface ForceUnit {
 }
 
 export interface Force extends Document {
-  id: number;
+  id: string;
   name: string;
   supplyLimit: number;
   supplyUsed: number;

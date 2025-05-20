@@ -3,7 +3,7 @@ import { Force } from "../../types/global";
 
 const forceSchema: Schema = new mongoose.Schema<Force>({
   id: {
-    type: Number,
+    type: String,
     required: true
   },
   name: {
