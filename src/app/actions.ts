@@ -12,6 +12,7 @@ export async function createForce(formData: FormData): Promise<void> {
     _id: ObjectId,
     id: formData.get("id") as string,
     name: formData.get("name") as string,
+    userId: formData.get("userId") as string,
     supplyLimit: supplyLimit,
     supplyUsed: 0,
     battleTally: 0,
@@ -22,6 +23,7 @@ export async function createForce(formData: FormData): Promise<void> {
   };
 
   const forceDoc = new forces(rawFormData);
+  console.log(forceDoc);
 
   try {
     const response = await fetch(`${process.env.LOCALHOST}/api/forces`, {

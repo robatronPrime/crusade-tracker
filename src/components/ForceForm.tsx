@@ -1,12 +1,15 @@
 "use client";
 
 import { createForce } from "@/app/actions";
-import { Force } from "../../types/global";
 import { useState } from "react";
 
-const ForceForm: React.FC = () => {
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
+interface ForceFormProps {
+  userId: string;
+}
+
+const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
+  const [id, setId] = useState<string | undefined>("");
+  const [name, setName] = useState<string | undefined>("");
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -34,6 +37,7 @@ const ForceForm: React.FC = () => {
         <input name="supplyLimit" type="number" className="input" />
       </label>
       <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="userId" value={userId} />
 
       <button type="submit" className="btn-primary">
         Save

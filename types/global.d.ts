@@ -13,6 +13,7 @@ export interface ForceUnit {
 export interface Force extends Document {
   id: string;
   name: string;
+  userId: string;
   supplyLimit: number;
   supplyUsed: number;
   battleTally: number;

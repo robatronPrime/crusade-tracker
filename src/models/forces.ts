@@ -10,6 +10,10 @@ const forceSchema: Schema = new mongoose.Schema<Force>({
     type: String,
     required: true
   },
+  userId: {
+    type: String,
+    required: true
+  },
   supplyLimit: {
     type: Number,
     required: true
