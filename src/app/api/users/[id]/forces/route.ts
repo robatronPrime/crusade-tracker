@@ -4,7 +4,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const id = (await params).id;
 
   try {
-    const response = await fetch(`${process.env.API_URL}/users/${id}/forces`, {
+    const response = await fetch(`${process.env.API_URL}/users/${id}`, {
       next: { revalidate: 60 }
     });
 

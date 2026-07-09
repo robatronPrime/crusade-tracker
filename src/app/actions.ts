@@ -1,38 +1,36 @@
 "use server";
 
-import { ObjectId } from "mongodb";
-import { Force } from "../../types/global";
-import forces from "@/models/forces";
+import { forceSchema } from "./schema";
 
-export async function createForce(formData: FormData): Promise<void> {
+export async function createForce(prevState: CreateFormState, formData: FormData): Promise<CreateFormState> {
   const supplyLimitRaw = formData.get("supplyLimit");
   const supplyLimit = typeof supplyLimitRaw === "string" ? Number(supplyLimitRaw) : 0;
 
-  const rawFormData = {
-    _id: ObjectId,
-    id: formData.get("id") as string,
-    name: formData.get("name") as string,
-    userId: formData.get("userId") as string,
-    supplyLimit: supplyLimit,
-    supplyUsed: 0,
-    battleTally: 0,
-    victories: 0,
-    requisitionPoints: 0,
-    units: [],
-    recordOfAchievement: []
-  };
-
-  const forceDoc = new forces(rawFormData);
-  console.log(forceDoc);
+  const validatedFields = forceSchema.safeParse({
+    id: formData.get("id") || null,
+    supplyLimit: supplyLimit || null,
+    name: formData.get("name") || null,
+    units: formData.get("units") || null,
+    userId: formData.get("userId") || null,
+    victories: formData.get("victories") || null,
+    supplyUsed: formData.get("supplyUsed") || null,
+    battleTally: formData.get("battleTally") || null,
+    requisitionPoints: formData.get("requisitionPoints") || null,
+    recordOfAchievement: formData.get("recordOfAchievement") || null
+  });
 
   try {
+    console.log(validatedFields);
+    
+    if (!validatedFields.success) return {success: false, message: `Validation failed. `}
+
     const response = await fetch(`${process.env.LOCALHOST}/api/forces`, {
       method: "POST",
       headers: {
         "content-type": "application/json"
       },
       next: { revalidate: 60 },
-      body: JSON.stringify(forceDoc)
+      body: JSON.stringify(validatedFields.data)
     });
 
     if (!response.ok) {
@@ -40,6 +38,7 @@ export async function createForce(formData: FormData): Promise<void> {
     }
 
     const data = await response.json();
+    return {success: true, message: "Force created."}
   } catch (error) {
     console.error("Failed to create force:", error);
     throw error;

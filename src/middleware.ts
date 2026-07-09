@@ -1,6 +1,8 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+export default clerkMiddleware({
+  clockSkewInMs: 60_000, // Allow or 60 seconds skew
+});
 
 export const config = {
   matcher: [

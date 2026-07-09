@@ -20,7 +20,5 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const data = (await getForces()) as Force;
 
-  console.log(data);
-
   return <ForceDetails data={data} />;
 }

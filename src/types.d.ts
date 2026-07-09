@@ -1,8 +1,4 @@
-// types/global.d.ts
-
-import { Document } from "mongoose";
-
-export interface ForceUnit {
+type ForceUnit = {
   modelCount: number;
   id: number;
   name: string;
@@ -10,26 +6,32 @@ export interface ForceUnit {
   crusadePoints: number;
 }
 
-export interface Force extends Document {
+type Force = {
   id: string;
   name: string;
   userId: string;
-  supplyLimit: number;
-  supplyUsed: number;
-  battleTally: number;
   victories: number;
-  requisitionPoints: number;
   units: ForceUnit[];
+  supplyUsed: number;
+  supplyLimit: number;
+  battleTally: number;
+  requisitionPoints: number;
   recordOfAchievement: string[]; // or a better type if you know it
 }
 
-export interface UnitWargear {
+type CrusadeUser = {
+  _id: string;
+  forces: Force[];
+  clerkID: string;
+}
+
+type UnitWargear = {
   name: string;
   id: number;
   desc: string;
 }
 
-export interface Unit extends Document {
+type Unit = {
   modelCount: number;
   id: number;
   name: string;
@@ -46,11 +48,11 @@ export interface Unit extends Document {
   battleScars: UnitWargear[];
 }
 
-export interface UserForceRef {
+type UserForceRef = {
   forceRef: number;
 }
 
-export interface User extends Document {
+type User = {
   clerkID: string;
   userName: string;
   forces: UserForceRef[];
@@ -62,3 +64,8 @@ type apiResponse = {
   status: number;
   error: string;
 };
+
+type CreateFormState = {
+  message: string;
+  success: boolean;
+}

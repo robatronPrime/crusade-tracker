@@ -1,40 +1,40 @@
 import Link from "next/link";
-import { Force } from "../../types/global";
 import Image from "next/image";
 import BackBtn from "./BackBtn";
+import { JSX } from "react";
 
 interface ForceProps {
-  data: Force;
+  forceProps: Force;
 }
 
-const ForceDetails: React.FC<ForceProps> = ({ data }) => {
+const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
+  const { id, name, userId, victories, units, supplyUsed, supplyLimit, battleTally, requisitionPoints, recordOfAchievement } = forceProps;
+
   return (
-    <>
-      <div className="absolute top-4 left-4">
-        <BackBtn url="/forces" />
-      </div>
-      <h1 className="mb-8 text-4xl font-bold">{data.name}</h1>
-      <div className={"col-span-12 px-4 lg:px-8 text-xs lg:text-base"}>
+    <div className="col-span-12 px-4 lg:p-8 text-xs lg:text-base relative">
+      <div className={"col-span-12 px-4 lg:p-8 text-xs lg:text-base"}>
+        <h1 className="mb-8 text-4xl font-bold">{name}</h1>
+        
         {/* ── Tally overview ───────────────────────────── */}
         <div className="col-span-7 flex justify-between gap-4 mb-4 flex-wrap">
           <div className="flex gap-4 items-center">
             <p className="font-bold">Battle Tally</p>
-            <p>{data.battleTally}</p>
+            <p>{battleTally}</p>
           </div>
           <div className="flex gap-4 items-center">
             <p className="font-bold">Victories</p>
-            <p>{data.victories}</p>
+            <p>{victories}</p>
           </div>
           <div className="flex gap-4 items-center">
             <p className="font-bold">Requisition Points</p>
-            <p>{data.requisitionPoints}</p>
+            <p>{requisitionPoints}</p>
           </div>
         </div>
 
         <div className="col-span-10 grid grid-cols-12 gap-4 my-8">
           {/* ── Unit rows ──────────────────────────────── */}
           <p className="">Units</p>
-          {data.units.map((unit, idx) => (
+          {units && units.map((unit, idx) => (
             <div key={unit.id} className="col-span-12 grid grid-cols-12 gap-4 w-full">
               <div className="col-span-7 lg:col-span-8 flex items-end">
                 <p>{unit.name}</p>
@@ -58,13 +58,13 @@ const ForceDetails: React.FC<ForceProps> = ({ data }) => {
         {/* ── Record of Achievement Column ──────────────────────────────── */}
         <div className="col-span-2 flex flex-col">
           <p>Record of Achievement</p>
-          {data.recordOfAchievement?.length == 0 ? <p>No records</p> : ""}
-          {data.recordOfAchievement?.map((achievement) => (
+          {recordOfAchievement?.length == 0 ? <p>No records</p> : ""}
+          {recordOfAchievement?.map((achievement) => (
             <p>{achievement}</p>
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
