@@ -58,11 +58,11 @@ type User = {
   forces: UserForceRef[];
 }
 
-type apiResponse = {
-  data: any;
-  ok: boolean;
+type apiResponse<T> = {
+  data: T | null;
   status: number;
-  error: string;
+  error: boolean;
+  message: string;
 };
 
 type CreateFormState = {

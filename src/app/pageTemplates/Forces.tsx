@@ -8,9 +8,7 @@ type ForceProps = {
   data: CrusadeUser | null;
 }
 
-const Forces = ({ data }: ForceProps): JSX.Element => {
-    console.log("forces",data);
-    
+const Forces = ({ data }: ForceProps): JSX.Element => {    
     return (
         <>
             <div className="absolute top-4 left-4">

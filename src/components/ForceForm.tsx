@@ -3,7 +3,8 @@
 import Input from "./Input";
 import { createForce } from "@/app/actions";
 import Image from "next/image";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { success } from "zod";
 
 type ForceFormProps = {
   userId: string;
@@ -33,11 +34,18 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
   // const units: Unit[] = [];
   // const addUnit = (): void => {}
 
-  console.log(state, pending);
+  useEffect(() => {
+    console.log(state, pending);
+  }, [state, pending]);
   
 
   return (
     <form action={formAction} className="grid grid-cols-12 gap-4 border-2 border-yellow-500 bg-grey-100 rounded-2xl lg:gap-x-8 lg:gap-y-1 my-8 p-4">
+      {!pending && state.message !== "" && (
+        <div className={`col-span-12 flex justify-center mb-2 ${state.success ? "bg-green-300" : "bg-red-300"}`}>
+          <h4>{state.message}</h4>
+        </div>
+      )}
       <div className="col-span-3">
         <Input name="name" label="Name" type="text" value={name} onChange={handleOnChange} />
       </div>
