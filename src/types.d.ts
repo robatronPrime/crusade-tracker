@@ -32,20 +32,20 @@ type UnitWargear = {
 }
 
 type Unit = {
-  modelCount: number;
   id: number;
-  name: string;
+  xp: number;
+  unitName: string;
+  type: string;
+  modelCount: number;
   pointsValue: number;
   crusadePoints: number;
-  type: string;
   battlesPlayed: number;
+  wargear?: UnitWargear[];
   battlesSurvived: number;
+  battleScars?: UnitWargear[];
+  enhancements?: UnitWargear[];
   enemyUnitsDestroyed: number;
-  xp: number;
-  wargear: UnitWargear[];
-  enhancements: UnitWargear[];
-  battleHonours: UnitWargear[];
-  battleScars: UnitWargear[];
+  battleHonours?: UnitWargear[];
 }
 
 type UserForceRef = {

@@ -3,18 +3,31 @@
 import Input from "./Input";
 import { createForce } from "@/app/actions";
 import Image from "next/image";
-import { useActionState, useEffect, useState } from "react";
-import { success } from "zod";
+import { ChangeEvent, useActionState, useEffect, useState } from "react";
+import { number, success } from "zod";
 
 type ForceFormProps = {
   userId: string;
 }
 
 const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
-  const initialState: CreateFormState = {message:"", success: false}
+  const [units, setUnits] = useState<Unit[]>([]); 
   const [id, setId] = useState<string | undefined>("");
   const [name, setName] = useState<string | undefined>("");
-  const [state, formAction, pending] = useActionState(createForce, initialState)
+  const initialState: CreateFormState = {message:"", success: false};
+  const [state, formAction, pending] = useActionState(createForce, initialState);
+  const defaultUnit = {
+    xp: 0,
+    name: "",
+    type: "",
+    modelCount: 0,
+    pointsValue: 0,
+    crusadePoints: 0,
+    battlesPlayed: 0,
+    battlesSurvived: 0,
+    enemyUnitsDestroyed: 0,
+  };
+  const [unitDraft, setUnitDraft] = useState<Omit<Unit, "id" >>(defaultUnit);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -31,8 +44,29 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
       .replace(/--+/g, "-");
   };
 
-  // const units: Unit[] = [];
-  // const addUnit = (): void => {}
+  
+  const addUnit = (): void => {
+    if (!unitDraft.name.trim()) return;
+
+    const newUnit: Unit = {
+      id: Date.now(),
+      ...unitDraft
+    };
+
+    setUnits((currentUnits) => [
+      ...currentUnits,
+      newUnit,
+    ]);
+
+    setUnitDraft(defaultUnit);
+  }
+
+  const handleUnitInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setUnitDraft((unit) => ({
+      ...unit,
+      
+    }))
+  }
 
   useEffect(() => {
     console.log(state, pending);
@@ -64,21 +98,26 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
       <div className="col-span-3">
         <Input name="requisitionPoints" type="number" label="Requisition Points" />
       </div>
-      {/* <div className="col-span-12">
+
+      {units && (
+        <div>
+          <p>Added units</p>
+          {units.map((unit, idx) => (
+            <p key={unit.id}>{unit.name}</p>
+          ))}
+        </div>
+      )}
+      <div className="col-span-12">
         <h3>Units</h3>
 
         <div>
           <Input name="unitName" type="text" label="Unit Name" />
           <Input name="pointsValue" type="number" label="Points Value" />
-          <Input name="crusadePoints" type="number" label="Crusade Points" />
+          <Input name="crusadePoints" type="number" label="Crusade Points" onChange={(e) => } />
         </div>
 
-        <button onClick={addUnit}>
-          <div className="flex justify-end bg-yellow-400 text-white p-4 rounded-full">
-            <Image src="/images/outline/plus.svg" alt="plus" width="20" height="20" />
-          </div>
-        </button>
-      </div> */}
+        <button onClick={addUnit}>add unit</button>
+      </div>
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="userId" value={userId} />
 
