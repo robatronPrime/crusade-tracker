@@ -1,6 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
-import BackBtn from "./BackBtn";
 import { JSX } from "react";
 
 interface ForceProps {
@@ -33,11 +30,30 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
 
         <div className="col-span-10 grid grid-cols-12 gap-4 my-8">
           {/* ── Unit rows ──────────────────────────────── */}
-          <p className="">Units</p>
-          {units && units.map((unit, idx) => (
+          <div className="col-span-12 grid grid-cols-12 gap-4 w-full">
+            <div className="col-span-7 lg:col-span-8 flex items-end">
+              <p className="font-bold">Units</p>
+            </div>
+            <div className="col-span-1 text-center flex justify-center items-end">
+              <p className="font-bold">XP</p>
+            </div>
+            <div className="col-span-1 text-center flex justify-center items-end">
+              <p className="font-bold">Points Value</p>
+            </div>
+            <div className="col-span-1 text-center flex justify-center items-end">
+              <p className="font-bold">Model Count</p>
+            </div>
+            <div className="col-span-1 text-center flex justify-center items-end">
+              <p className="font-bold">Crusade Points</p>
+            </div>
+          </div>
+          {units && units.map((unit: Unit) => (
             <div key={unit.id} className="col-span-12 grid grid-cols-12 gap-4 w-full">
               <div className="col-span-7 lg:col-span-8 flex items-end">
-                <p>{unit.name}</p>
+                <p>{unit.unitName}</p>
+              </div>
+              <div className="col-span-1 text-center flex justify-center items-end">
+                <p>{unit.xp}</p>
               </div>
               <div className="col-span-1 text-center flex justify-center items-end">
                 <p>{unit.pointsValue}</p>
@@ -48,9 +64,6 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
               <div className="col-span-1 text-center flex justify-center items-end">
                 <p>{unit.crusadePoints}</p>
               </div>
-              <Link className="col-span-2 lg:col-span-1 opacity-70 hover:opacity-100" href={""}>
-                <Image src="/images/filled/arrow-big-right.svg" alt="arrow right" width="20" height="20" />
-              </Link>
             </div>
           ))}
         </div>

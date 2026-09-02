@@ -13,7 +13,7 @@ export const forceSchema = z.object({
   name: z.string(),
   userId: z.string(),
   victories: z.optional(z.number().int().nonnegative()),
-  units: z.optional(z.array(forceUnitSchema)),
+  units: z.optional(z.string()),
   supplyUsed: z.optional(z.number().int().nonnegative()),
   supplyLimit: z.optional(z.number().int().nonnegative()),
   battleTally: z.optional(z.number().int().nonnegative()),

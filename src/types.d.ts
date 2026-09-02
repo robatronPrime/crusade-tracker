@@ -1,17 +1,9 @@
-type ForceUnit = {
-  modelCount: number;
-  id: number;
-  name: string;
-  pointsValue: number;
-  crusadePoints: number;
-}
-
 type Force = {
   id: string;
   name: string;
   userId: string;
   victories: number;
-  units: ForceUnit[];
+  units: Unit[];
   supplyUsed: number;
   supplyLimit: number;
   battleTally: number;
@@ -34,8 +26,8 @@ type UnitWargear = {
 type Unit = {
   id: number;
   xp: number;
-  unitName: string;
   type: string;
+  unitName: string;
   modelCount: number;
   pointsValue: number;
   crusadePoints: number;
@@ -44,7 +36,7 @@ type Unit = {
   battlesSurvived: number;
   battleScars?: UnitWargear[];
   enhancements?: UnitWargear[];
-  enemyUnitsDestroyed: number;
+  enemyUnitsDestroyed?: number;
   battleHonours?: UnitWargear[];
 }
 

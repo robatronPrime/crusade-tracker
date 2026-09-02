@@ -18,16 +18,16 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
   const [state, formAction, pending] = useActionState(createForce, initialState);
   const defaultUnit = {
     xp: 0,
-    name: "",
     type: "",
+    unitName: "",
     modelCount: 0,
     pointsValue: 0,
     crusadePoints: 0,
     battlesPlayed: 0,
     battlesSurvived: 0,
-    enemyUnitsDestroyed: 0,
   };
   const [unitDraft, setUnitDraft] = useState<Omit<Unit, "id" >>(defaultUnit);
+  const unitCol = "col-span-3"
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -45,8 +45,9 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
   };
 
   
-  const addUnit = (): void => {
-    if (!unitDraft.name.trim()) return;
+  const addUnit = (e: any): void => {
+    e.preventDefault();
+    if (!unitDraft.unitName.trim()) return;
 
     const newUnit: Unit = {
       id: Date.now(),
@@ -62,9 +63,10 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
   }
 
   const handleUnitInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const target = e.target;
     setUnitDraft((unit) => ({
       ...unit,
-      
+      [target.name]: target.value
     }))
   }
 
@@ -102,22 +104,36 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
       {units && (
         <div>
           <p>Added units</p>
+          <div className="grid grid-cols-12 gap-4">
+
+          </div>
           {units.map((unit, idx) => (
-            <p key={unit.id}>{unit.name}</p>
+            <div key={unit.id} className="grid grid-cols-12 gap-4">
+              <div className={unitCol}>
+                <p>{unit.unitName}</p>
+              </div>
+              <p>{unit.pointsValue}</p>
+              <p>{unit.modelCount}</p>
+            </div>
           ))}
         </div>
       )}
-      <div className="col-span-12">
+      <div className="col-span-12 flex flex-col items-start my-8">
         <h3>Units</h3>
 
         <div>
-          <Input name="unitName" type="text" label="Unit Name" />
-          <Input name="pointsValue" type="number" label="Points Value" />
-          <Input name="crusadePoints" type="number" label="Crusade Points" onChange={(e) => } />
+          <Input name="unitName" type="text" label="Unit Name" onChange={handleUnitInput} />
+          <Input name="pointsValue" type="number" label="Points Value" onChange={handleUnitInput} />
+          <Input name="crusadePoints" type="number" label="Crusade Points" onChange={handleUnitInput} />
+          <Input name="modelCount" type="number" label="Model Count" onChange={handleUnitInput} />
+          <Input name="crusadePoints" type="number" label="Crusade Points" onChange={handleUnitInput} />
+          <Input name="battlesPlayed" type="number" label="Battles Played" onChange={handleUnitInput} />
+          <Input name="battlesSurvived" type="number" label="Battles Survived" onChange={handleUnitInput} />
         </div>
 
-        <button onClick={addUnit}>add unit</button>
+        <button className="bg-yellow-400 px-4 py-2 hover:bg-yellow-300 hover:cursor-pointer" onClick={addUnit}>add unit</button>
       </div>
+      <input type="hidden" name="units" value={JSON.stringify(units)} />
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="userId" value={userId} />
 
