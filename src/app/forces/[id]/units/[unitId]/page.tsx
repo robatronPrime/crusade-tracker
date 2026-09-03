@@ -9,7 +9,7 @@ export default async function UnitEditPage({ params }: PageProps) {
   const { id: forceId, unitId } = await params;
 
   const unitRes = await fetch(`${process.env.LOCALHOST}/api/units/${unitId}`, {
-    next: { revalidate: 0 },
+    cache: "no-store",
   });
 
   if (!unitRes.ok) {
@@ -29,8 +29,9 @@ export default async function UnitEditPage({ params }: PageProps) {
     battlesSurvived: Number(rawUnit.battlesSurvived ?? 0),
   };
 
-  const forceRes = await fetch(`${process.env.LOCALHOST}/api/forces/${forceId}`, {
-    next: { revalidate: 0 },
+  const mongoForceId = String(rawUnit.forceId ?? forceId);
+  const forceRes = await fetch(`${process.env.LOCALHOST}/api/forces/${mongoForceId}`, {
+    cache: "no-store",
   });
 
   if (!forceRes.ok) {
@@ -49,7 +50,7 @@ export default async function UnitEditPage({ params }: PageProps) {
       <h1 className="text-3xl font-bold mb-4">Edit Unit</h1>
       <UnitEditForm
         unit={unit}
-        forceId={forceId}
+        forceId={mongoForceId}
         supplyLimit={supplyLimit}
         otherUnitsPoints={otherUnitsPoints}
       />

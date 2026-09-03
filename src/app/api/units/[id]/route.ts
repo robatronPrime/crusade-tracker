@@ -7,7 +7,7 @@ export async function GET(_req: NextRequest, { params }: RouteContext) {
 
   try {
     const response = await fetch(`${process.env.API_URL}/units/${id}`, {
-      next: { revalidate: 60 }
+      cache: "no-store"
     });
     const data = await response.json();
     return new Response(JSON.stringify(data), { status: response.status });

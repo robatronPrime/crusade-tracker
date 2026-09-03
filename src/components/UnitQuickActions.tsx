@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChangeEvent, useActionState, useState, useTransition } from "react";
+import { ChangeEvent, useActionState, useEffect, useState, useTransition } from "react";
 import { addUnit, deleteUnit } from "@/app/actions";
 import UnitFormFields from "./UnitFormFields";
 
@@ -35,6 +35,13 @@ const UnitQuickActions = ({
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(addUnit, initialState);
   const [isPending, startTransition] = useTransition();
+  const [deleteState, setDeleteState] = useState<CreateFormState | null>(null);
+
+  useEffect(() => {
+    if (state.success) {
+      setDraft({ name: "", modelCount: 0, pointsValue: 0 });
+    }
+  }, [state.success]);
 
   const wouldExceed =
     supplyLimit > 0 && supplyUsed + Number(draft.pointsValue || 0) > supplyLimit;
@@ -50,7 +57,12 @@ const UnitQuickActions = ({
   const onDelete = (unitId: string, label: string) => {
     if (!window.confirm(`Delete unit "${label}"?`)) return;
     startTransition(async () => {
-      await deleteUnit(unitId);
+      const result = await deleteUnit(unitId);
+      if (!result.success) {
+        setDeleteState(result);
+      } else {
+        setDeleteState(null);
+      }
     });
   };
 
@@ -103,6 +115,10 @@ const UnitQuickActions = ({
           </div>
         );
       })}
+
+      {deleteState && !deleteState.success && deleteState.message !== "" && (
+        <div className="col-span-12 bg-red-300 mt-4">{deleteState.message}</div>
+      )}
 
       <form action={formAction} className="col-span-12 grid grid-cols-12 gap-4 mt-6">
         {!pending && state.message !== "" && (

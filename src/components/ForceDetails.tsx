@@ -17,7 +17,7 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
     recordOfAchievement,
   } = forceProps;
 
-  const forceId = String(forceProps.id || forceProps._id || "");
+  const forceId = String(forceProps._id || forceProps.id || "");
 
   return (
     <div className="col-span-12 px-4 lg:p-8 text-xs lg:text-base relative">
