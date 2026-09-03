@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { Geist, Geist_Mono, Cinzel } from "next/font/google";
 import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import PageShell from "@/components/PageShell";
 
 
 const geistSans = Geist({
@@ -57,15 +58,15 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} antialiased`}>
-          <header className="flex justify-end bg-gray-100 p-4 text-black gap-4">
+          <header className="flex justify-end items-center bg-bg-header border-b border-brass px-4 lg:px-8 py-3 gap-4">
             <SignedIn>
-              <p>Welcome, {user?.firstName}</p>
+              <span className="text-parchment text-sm">Welcome, {user?.firstName}</span>
               <UserButton />
             </SignedIn>
           </header>
-          <section className="bg-gray-100 text-black grid grid-cols-12 gap-4 lg:gap-8 px-4 lg:px-8">
-            <div className="pt-8 col-span-12 min-h-screen">{children}</div>
-          </section>
+          <PageShell>
+            {children}
+          </PageShell>
         </body>
       </html>
     </ClerkProvider>
