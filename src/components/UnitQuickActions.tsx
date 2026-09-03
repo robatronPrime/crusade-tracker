@@ -67,14 +67,15 @@ const UnitQuickActions = ({
   };
 
   return (
-    <div className="col-span-12 mt-4">
-      <div className="col-span-12 grid grid-cols-12 gap-4 w-full mb-2">
-        <div className="col-span-5 lg:col-span-6 font-bold">Units</div>
-        <div className="col-span-1 text-center font-bold">XP</div>
-        <div className="col-span-1 text-center font-bold">Points</div>
-        <div className="col-span-1 text-center font-bold">Models</div>
-        <div className="col-span-1 text-center font-bold">CP</div>
-        <div className="col-span-3 lg:col-span-2 font-bold">Actions</div>
+    <div className="mt-4">
+      {/* Unit table header */}
+      <div className="grid grid-cols-12 gap-4 w-full mb-2 text-xs uppercase tracking-widest text-ink/60">
+        <div className="col-span-5 lg:col-span-6">Units</div>
+        <div className="col-span-1 text-center">XP</div>
+        <div className="col-span-1 text-center">Pts</div>
+        <div className="col-span-1 text-center">Mdl</div>
+        <div className="col-span-1 text-center">CP</div>
+        <div className="col-span-3 lg:col-span-2">Actions</div>
       </div>
 
       {units?.map((unit) => {
@@ -83,9 +84,9 @@ const UnitQuickActions = ({
         return (
           <div
             key={String(unit.id ?? label)}
-            className="col-span-12 grid grid-cols-12 gap-4 w-full items-center mb-1"
+            className="col-span-12 grid grid-cols-12 gap-4 w-full items-center mb-1 py-1 border-b border-brass/20 text-sm"
           >
-            <div className="col-span-5 lg:col-span-6">{label}</div>
+            <div className="col-span-5 lg:col-span-6 font-medium">{label}</div>
             <div className="col-span-1 text-center">{unit.xp ?? 0}</div>
             <div className="col-span-1 text-center">{unit.pointsValue}</div>
             <div className="col-span-1 text-center">{unit.modelCount}</div>
@@ -93,15 +94,12 @@ const UnitQuickActions = ({
             <div className="col-span-3 lg:col-span-2 flex gap-2">
               {managed ? (
                 <>
-                  <Link
-                    className="underline"
-                    href={`/forces/${forceId}/units/${unit.id}`}
-                  >
+                  <Link className="text-brass text-xs underline hover:text-brass-hover" href={`/forces/${forceId}/units/${unit.id}`}>
                     Edit
                   </Link>
                   <button
                     type="button"
-                    className="underline"
+                    className="text-danger text-xs underline hover:text-danger-hover disabled:opacity-50"
                     disabled={isPending}
                     onClick={() => onDelete(String(unit.id), label)}
                   >
@@ -109,7 +107,7 @@ const UnitQuickActions = ({
                   </button>
                 </>
               ) : (
-                <span className="text-xs">Legacy</span>
+                <span className="text-ink/40 text-xs">Legacy</span>
               )}
             </div>
           </div>
@@ -117,13 +115,19 @@ const UnitQuickActions = ({
       })}
 
       {deleteState && !deleteState.success && deleteState.message !== "" && (
-        <div className="col-span-12 bg-red-300 mt-4">{deleteState.message}</div>
+        <div className="bg-danger/20 text-danger border border-danger rounded px-4 py-2 my-2 text-sm">
+          {deleteState.message}
+        </div>
       )}
 
-      <form action={formAction} className="col-span-12 grid grid-cols-12 gap-4 mt-6">
+      <form action={formAction} className="grid grid-cols-12 gap-4 mt-6">
         {!pending && state.message !== "" && (
           <div
-            className={`col-span-12 ${state.success ? "bg-green-300" : "bg-red-300"}`}
+            className={`col-span-12 rounded px-4 py-2 text-sm ${
+              state.success
+                ? "bg-success-bg text-success-text"
+                : "bg-danger/20 text-danger border border-danger"
+            }`}
           >
             {state.message}
           </div>
@@ -131,17 +135,17 @@ const UnitQuickActions = ({
         <input type="hidden" name="forceId" value={forceId} />
         <UnitFormFields mode="quickAdd" values={draft} onChange={onChange} />
         {wouldExceed && (
-          <p className="col-span-12 text-red-700">
+          <p className="col-span-12 text-danger text-sm">
             Adding this unit would exceed the supply limit.
           </p>
         )}
         <div className="col-span-12">
           <button
             type="submit"
-            className="bg-yellow-400 px-4 py-2 hover:bg-yellow-300 disabled:opacity-50"
+            className="inline-block bg-brass text-ink font-bold px-5 py-2 rounded uppercase tracking-widest text-sm hover:bg-brass-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={pending || wouldExceed || !draft.name.trim()}
           >
-            Add unit
+            Add Unit
           </button>
         </div>
       </form>
