@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import PageHeader from "@/components/PageHeader";
 import UnitEditForm from "@/components/UnitEditForm";
 
 type PageProps = {
@@ -46,14 +47,16 @@ export default async function UnitEditPage({ params }: PageProps) {
     .reduce((sum, u) => sum + Number(u.pointsValue ?? 0), 0);
 
   return (
-    <main className="p-4">
-      <h1 className="text-3xl font-bold mb-4">Edit Unit</h1>
-      <UnitEditForm
-        unit={unit}
-        forceId={mongoForceId}
-        supplyLimit={supplyLimit}
-        otherUnitsPoints={otherUnitsPoints}
-      />
-    </main>
+    <>
+      <PageHeader title="Edit Unit" backHref="/forces" backLabel="← Orders of Battle" />
+      <div className="col-span-12">
+        <UnitEditForm
+          unit={unit}
+          forceId={mongoForceId}
+          supplyLimit={supplyLimit}
+          otherUnitsPoints={otherUnitsPoints}
+        />
+      </div>
+    </>
   );
 }
