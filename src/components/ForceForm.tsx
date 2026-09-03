@@ -1,6 +1,7 @@
 "use client";
 
 import Input from "./Input";
+import ParchmentCard from "@/components/ParchmentCard";
 import UnitFormFields from "./UnitFormFields";
 import { createForce } from "@/app/actions";
 import { ChangeEvent, useActionState, useMemo, useState } from "react";
@@ -85,103 +86,106 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
   };
 
   return (
-    <form
-      action={formAction}
-      className="grid grid-cols-12 gap-4 border-2 border-yellow-500 bg-grey-100 rounded-2xl lg:gap-x-8 lg:gap-y-1 my-8 p-4"
-    >
-      {!pending && state.message !== "" && (
-        <div
-          className={`col-span-12 flex justify-center mb-2 ${
-            state.success ? "bg-green-300" : "bg-red-300"
-          }`}
-        >
-          <h4>{state.message}</h4>
-        </div>
-      )}
-
-      <div className="col-span-3">
-        <Input name="name" label="Name" type="text" value={name} onChange={handleOnChange} />
-      </div>
-      <div className="col-span-3">
-        <Input
-          name="supplyLimit"
-          type="number"
-          label="Supply Limit"
-          value={supplyLimit}
-          onChange={(e) => setSupplyLimit(Number(e.target.value) || 0)}
-        />
-      </div>
-      <div className="col-span-3 flex items-end">
-        <p className="font-bold">
-          Supply Used: {supplyUsed} / {supplyLimit || "—"}
-        </p>
-      </div>
-      <div className="col-span-3">
-        <Input name="victories" type="number" label="Victories" />
-      </div>
-      <div className="col-span-3">
-        <Input name="battleTally" type="number" label="Battle Tally" />
-      </div>
-      <div className="col-span-3">
-        <Input name="requisitionPoints" type="number" label="Requisition Points" />
-      </div>
-
-      <div className="col-span-12 my-4">
-        <p className="font-bold mb-2">Added units</p>
-        <div className="grid grid-cols-12 gap-2 mb-2 font-bold text-sm">
-          <div className="col-span-5">Name</div>
-          <div className="col-span-2">Points</div>
-          <div className="col-span-2">Models</div>
-          <div className="col-span-3" />
-        </div>
-        {units.map((unit, idx) => (
-          <div key={`${unit.name}-${idx}`} className="grid grid-cols-12 gap-2 items-center mb-1">
-            <div className="col-span-5">{unit.name}</div>
-            <div className="col-span-2">{unit.pointsValue}</div>
-            <div className="col-span-2">{unit.modelCount}</div>
-            <div className="col-span-3">
-              <button
-                type="button"
-                className="bg-yellow-400 px-3 py-1 hover:bg-yellow-300"
-                onClick={() => removeUnit(idx)}
-              >
-                Remove
-              </button>
-            </div>
+    <ParchmentCard className="my-8">
+      <form action={formAction}>
+        {!pending && state.message !== "" && (
+          <div
+            className={`rounded px-4 py-2 mb-6 text-sm ${
+              state.success
+                ? "bg-success-bg text-success-text"
+                : "bg-danger/20 text-danger border border-danger"
+            }`}
+          >
+            {state.message}
           </div>
-        ))}
-        {units.length === 0 && <p className="text-sm">No units added yet.</p>}
-      </div>
-
-      <div className="col-span-12 flex flex-col items-start my-4 gap-4">
-        <h3 className="font-bold">Units</h3>
-        <UnitFormFields mode="create" values={unitDraft} onChange={handleUnitInput} />
-        {wouldExceed && (
-          <p className="text-red-700">
-            Adding this unit would exceed the supply limit ({supplyUsed + draftPoints} /{" "}
-            {supplyLimit}).
-          </p>
         )}
-        <button
-          type="button"
-          className="bg-yellow-400 px-4 py-2 hover:bg-yellow-300 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={addUnit}
-          disabled={wouldExceed || !unitDraft.name.trim()}
-        >
-          Add unit
-        </button>
-      </div>
 
-      <input type="hidden" name="units" value={JSON.stringify(units)} />
-      <input type="hidden" name="id" value={id} />
-      <input type="hidden" name="userId" value={userId} />
+        <div className="grid grid-cols-12 gap-6">
+          {/* Left: force details */}
+          <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
+            <h2 className="font-display text-xl uppercase tracking-widest text-ink border-b border-brass/40 pb-2">
+              New Order of Battle
+            </h2>
+            <Input name="name" label="Name" type="text" value={name} onChange={handleOnChange} />
+            <Input
+              name="supplyLimit"
+              type="number"
+              label="Supply Limit"
+              value={supplyLimit}
+              onChange={(e) => setSupplyLimit(Number(e.target.value) || 0)}
+            />
+            <p className="text-ink/60 text-sm">
+              Supply used: <span className="font-bold text-ink">{supplyUsed}</span> / {supplyLimit || "—"}
+            </p>
+            <Input name="victories" type="number" label="Victories" />
+            <Input name="battleTally" type="number" label="Battle Tally" />
+            <Input name="requisitionPoints" type="number" label="Requisition Points" />
 
-      <div className="col-span-12">
-        <button type="submit" className="btn-primary" disabled={pending}>
-          Save
-        </button>
-      </div>
-    </form>
+            <input type="hidden" name="units" value={JSON.stringify(units)} />
+            <input type="hidden" name="id" value={id} />
+            <input type="hidden" name="userId" value={userId} />
+
+            <button
+              type="submit"
+              className="inline-block bg-brass text-ink font-bold px-5 py-2 rounded uppercase tracking-widest text-sm hover:bg-brass-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+              disabled={pending}
+            >
+              Save
+            </button>
+          </div>
+
+          {/* Right: unit roster */}
+          <div className="col-span-12 lg:col-span-6 flex flex-col gap-4 lg:border-l lg:border-brass/40 lg:pl-6">
+            <h3 className="font-display text-lg uppercase tracking-widest text-ink border-b border-brass/40 pb-2">
+              Units
+            </h3>
+
+            <div>
+              <div className="grid grid-cols-12 gap-2 text-xs uppercase tracking-widest text-ink/60 mb-1">
+                <div className="col-span-5">Name</div>
+                <div className="col-span-2">Pts</div>
+                <div className="col-span-2">Mdl</div>
+                <div className="col-span-3" />
+              </div>
+              {units.length === 0 && (
+                <p className="text-ink/50 text-sm">No units added yet.</p>
+              )}
+              {units.map((unit, idx) => (
+                <div key={`${unit.name}-${idx}`} className="grid grid-cols-12 gap-2 items-center py-1 border-b border-brass/20 text-sm">
+                  <div className="col-span-5">{unit.name}</div>
+                  <div className="col-span-2">{unit.pointsValue}</div>
+                  <div className="col-span-2">{unit.modelCount}</div>
+                  <div className="col-span-3">
+                    <button
+                      type="button"
+                      className="text-danger text-xs underline hover:text-danger-hover"
+                      onClick={() => removeUnit(idx)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <UnitFormFields mode="create" values={unitDraft} onChange={handleUnitInput} />
+            {wouldExceed && (
+              <p className="text-danger text-sm">
+                Adding this unit would exceed the supply limit ({supplyUsed + draftPoints} / {supplyLimit}).
+              </p>
+            )}
+            <button
+              type="button"
+              className="inline-block bg-brass text-ink font-bold px-5 py-2 rounded uppercase tracking-widest text-sm hover:bg-brass-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={addUnit}
+              disabled={wouldExceed || !unitDraft.name.trim()}
+            >
+              Add Unit
+            </button>
+          </div>
+        </div>
+      </form>
+    </ParchmentCard>
   );
 };
 
