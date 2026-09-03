@@ -192,3 +192,26 @@ export async function deleteUnit(unitId: string): Promise<CreateFormState> {
     return { success: false, message: "Network error deleting unit." };
   }
 }
+
+export async function deleteForce(forceId: string): Promise<CreateFormState> {
+  if (!forceId) {
+    return { success: false, message: "Force id is required." };
+  }
+
+  try {
+    const response = await fetch(`${process.env.LOCALHOST}/api/forces/${forceId}`, {
+      method: "DELETE",
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, message: data?.error ?? "Failed to delete force." };
+    }
+
+    revalidatePath("/forces");
+    return { success: true, message: "Force deleted." };
+  } catch (error) {
+    console.error("Failed to delete force:", error);
+    return { success: false, message: "Network error deleting force." };
+  }
+}
