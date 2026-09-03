@@ -27,13 +27,15 @@ const ForceDeleteButton = ({ forceId, forceName }: ForceDeleteButtonProps): JSX.
   };
 
   return (
-    <div className="col-span-12 mt-8">
+    <div className="mt-10">
       {deleteState && !deleteState.success && deleteState.message !== "" && (
-        <div className="col-span-12 bg-red-300 mb-4">{deleteState.message}</div>
+        <div className="bg-danger/20 text-danger border border-danger rounded px-4 py-2 mb-4 text-sm">
+          {deleteState.message}
+        </div>
       )}
       <button
         type="button"
-        className="underline"
+        className="text-danger text-sm underline hover:text-danger-hover transition-colors disabled:opacity-50"
         disabled={isPending || !forceId}
         onClick={onDelete}
       >
