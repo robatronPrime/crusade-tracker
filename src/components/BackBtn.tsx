@@ -1,32 +1,31 @@
+// src/components/BackBtn.tsx
 import { JSX } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 interface BackBtnProps {
   url?: string;
-  onClick? : any;
+  onClick?: () => void;
 }
 
 const BackBtn = ({ url, onClick }: BackBtnProps): JSX.Element => {
   if (url) {
     return (
-      <Link href={url}>
-        <div className="flex justify-end bg-yellow-400 hover:scale-105 transition-all duration-150 ease-out text-white p-2 rounded-full">
-          <Image src="/images/filled/arrow-big-left.svg" alt="arrow left" width="20" height="20" />
-        </div>
+      <Link href={url} className="text-brass text-sm hover:text-brass-hover transition-colors">
+        ← Back
       </Link>
     );
   } else if (onClick) {
     return (
-      <button onClick={onClick}>
-        <div className="flex justify-end bg-yellow-400 hover:scale-105 transition-all duration-150 ease-out text-white p-2 rounded-full">
-          <Image src="/images/filled/arrow-big-left.svg" alt="arrow left" width="20" height="20" />
-        </div>
+      <button
+        type="button"
+        onClick={onClick}
+        className="text-brass text-sm hover:text-brass-hover transition-colors"
+      >
+        ← Back
       </button>
     );
-  } else {
-    return <></>;
   }
+  return <></>;
 };
 
 export default BackBtn;
