@@ -1,5 +1,6 @@
 import { JSX } from "react";
 import UnitQuickActions from "./UnitQuickActions";
+import ForceDeleteButton from "./ForceDeleteButton";
 
 interface ForceProps {
   forceProps: Force & { _id?: string };
@@ -59,6 +60,8 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
             <p key={achievement}>{achievement}</p>
           ))}
         </div>
+
+        <ForceDeleteButton forceId={forceId} forceName={name} />
       </div>
     </div>
   );
