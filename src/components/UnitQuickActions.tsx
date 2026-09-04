@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ChangeEvent, useActionState, useEffect, useState, useTransition } from "react";
 import { addUnit, deleteUnit } from "@/app/actions";
-import UnitFormFields from "./UnitFormFields";
+import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
 
 type UnitQuickActionsProps = {
   forceId: string;
@@ -11,10 +11,6 @@ type UnitQuickActionsProps = {
   supplyUsed: number;
   units: Unit[];
 };
-
-function unitDisplayName(unit: Unit): string {
-  return unit.name || unit.unitName || "";
-}
 
 function isManagedUnit(unit: Unit): boolean {
   const id = String(unit.id ?? "");
@@ -31,6 +27,16 @@ const UnitQuickActions = ({
     name: "",
     modelCount: 0,
     pointsValue: 0,
+    crusadePoints: 0,
+    type: "",
+    xp: 0,
+    battlesPlayed: 0,
+    battlesSurvived: 0,
+    enemyUnitsDestroyed: 0,
+    wargear: [] as UnitWargear[],
+    enhancements: [] as UnitWargear[],
+    battleHonours: [] as UnitWargear[],
+    battleScars: [] as UnitWargear[],
   });
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(addUnit, initialState);
@@ -39,7 +45,21 @@ const UnitQuickActions = ({
 
   useEffect(() => {
     if (state.success) {
-      setDraft({ name: "", modelCount: 0, pointsValue: 0 });
+      setDraft({
+        name: "",
+        modelCount: 0,
+        pointsValue: 0,
+        crusadePoints: 0,
+        type: "",
+        xp: 0,
+        battlesPlayed: 0,
+        battlesSurvived: 0,
+        enemyUnitsDestroyed: 0,
+        wargear: [],
+        enhancements: [],
+        battleHonours: [],
+        battleScars: [],
+      });
     }
   }, [state.success]);
 
@@ -52,6 +72,10 @@ const UnitQuickActions = ({
       ...d,
       [name]: type === "number" ? Number(value) : value,
     }));
+  };
+
+  const onTraitsChange = (key: UnitTraitKey, items: UnitWargear[]) => {
+    setDraft((d) => ({ ...d, [key]: items }));
   };
 
   const onDelete = (unitId: string, label: string) => {
@@ -80,7 +104,7 @@ const UnitQuickActions = ({
 
       {units?.map((unit) => {
         const managed = isManagedUnit(unit);
-        const label = unitDisplayName(unit);
+        const label = unit.name;
         return (
           <div
             key={String(unit.id ?? label)}
@@ -95,7 +119,7 @@ const UnitQuickActions = ({
               {managed ? (
                 <>
                   <Link className="text-brass text-xs underline hover:text-brass-hover" href={`/forces/${forceId}/units/${unit.id}`}>
-                    Edit
+                    View
                   </Link>
                   <button
                     type="button"
@@ -120,7 +144,7 @@ const UnitQuickActions = ({
         </div>
       )}
 
-      <form action={formAction} className="grid grid-cols-12 gap-4 mt-6">
+      <form action={formAction} className="grid grid-cols-12 gap-4 mt-6 items-end">
         {!pending && state.message !== "" && (
           <div
             className={`col-span-12 rounded px-4 py-2 text-sm ${
@@ -133,13 +157,13 @@ const UnitQuickActions = ({
           </div>
         )}
         <input type="hidden" name="forceId" value={forceId} />
-        <UnitFormFields mode="quickAdd" values={draft} onChange={onChange} />
+        <UnitFormFields mode="quickAdd" values={draft} onChange={onChange} onTraitsChange={onTraitsChange} />
         {wouldExceed && (
           <p className="col-span-12 text-danger text-sm">
             Adding this unit would exceed the supply limit.
           </p>
         )}
-        <div className="col-span-12">
+        <div className="col-span-12 lg:col-span-3 flex items-end">
           <button
             type="submit"
             className="inline-block bg-brass text-ink font-bold px-5 py-2 rounded uppercase tracking-widest text-sm hover:bg-brass-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

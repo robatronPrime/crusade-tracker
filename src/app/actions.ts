@@ -13,6 +13,30 @@ function formString(formData: FormData, key: string): string {
   return typeof raw === "string" ? raw : "";
 }
 
+function parseTraitList(raw: FormDataEntryValue | null) {
+  if (raw == null || raw === "") return [];
+  if (typeof raw !== "string") return null;
+  try {
+    return normalizeTraitList(JSON.parse(raw));
+  } catch {
+    return null;
+  }
+}
+
+function normalizeTraitList(raw: unknown): UnitWargear[] | null {
+  if (!Array.isArray(raw)) return null;
+  return raw
+    .map((item, index) => {
+      const parsedId = Number((item as { id?: number })?.id);
+      return {
+        id: Number.isFinite(parsedId) ? parsedId : index + 1,
+        name: String((item as { name?: string })?.name ?? "").trim(),
+        desc: String((item as { desc?: string })?.desc ?? ""),
+      };
+    })
+    .filter((item) => item.name.length > 0);
+}
+
 function parseUnitsField(raw: FormDataEntryValue | null) {
   if (raw == null || raw === "") return [];
   if (typeof raw !== "string") return null;
@@ -24,6 +48,15 @@ function parseUnitsField(raw: FormDataEntryValue | null) {
       modelCount: Number(u.modelCount ?? 0),
       pointsValue: Number(u.pointsValue ?? 0),
       crusadePoints: Number(u.crusadePoints ?? 0),
+      type: String(u.type ?? ""),
+      xp: Number(u.xp ?? 0),
+      battlesPlayed: Number(u.battlesPlayed ?? 0),
+      battlesSurvived: Number(u.battlesSurvived ?? 0),
+      enemyUnitsDestroyed: Number(u.enemyUnitsDestroyed ?? 0),
+      wargear: normalizeTraitList(u.wargear) ?? [],
+      enhancements: normalizeTraitList(u.enhancements) ?? [],
+      battleHonours: normalizeTraitList(u.battleHonours) ?? [],
+      battleScars: normalizeTraitList(u.battleScars) ?? [],
     }));
   } catch {
     return null;
@@ -91,12 +124,29 @@ export async function addUnit(
   prevState: CreateFormState,
   formData: FormData
 ): Promise<CreateFormState> {
+  const wargear = parseTraitList(formData.get("wargear"));
+  const enhancements = parseTraitList(formData.get("enhancements"));
+  const battleHonours = parseTraitList(formData.get("battleHonours"));
+  const battleScars = parseTraitList(formData.get("battleScars"));
+  if (wargear === null || enhancements === null || battleHonours === null || battleScars === null) {
+    return { success: false, message: "Invalid unit traits payload." };
+  }
+
   const validated = addUnitSchema.safeParse({
     forceId: formData.get("forceId"),
     name: formData.get("name"),
     modelCount: Number(formData.get("modelCount")) || 0,
     pointsValue: Number(formData.get("pointsValue")) || 0,
     crusadePoints: Number(formData.get("crusadePoints")) || 0,
+    type: formString(formData, "type"),
+    xp: Number(formData.get("xp")) || 0,
+    battlesPlayed: Number(formData.get("battlesPlayed")) || 0,
+    battlesSurvived: Number(formData.get("battlesSurvived")) || 0,
+    enemyUnitsDestroyed: Number(formData.get("enemyUnitsDestroyed")) || 0,
+    wargear,
+    enhancements,
+    battleHonours,
+    battleScars,
   });
 
   if (!validated.success) {
@@ -133,6 +183,14 @@ export async function updateUnit(
   prevState: CreateFormState,
   formData: FormData
 ): Promise<CreateFormState> {
+  const wargear = parseTraitList(formData.get("wargear"));
+  const enhancements = parseTraitList(formData.get("enhancements"));
+  const battleHonours = parseTraitList(formData.get("battleHonours"));
+  const battleScars = parseTraitList(formData.get("battleScars"));
+  if (wargear === null || enhancements === null || battleHonours === null || battleScars === null) {
+    return { success: false, message: "Invalid unit traits payload." };
+  }
+
   const validated = updateUnitSchema.safeParse({
     id: formData.get("id"),
     name: formData.get("name"),
@@ -142,6 +200,12 @@ export async function updateUnit(
     xp: Number(formData.get("xp")) || 0,
     battlesPlayed: Number(formData.get("battlesPlayed")) || 0,
     battlesSurvived: Number(formData.get("battlesSurvived")) || 0,
+    enemyUnitsDestroyed: Number(formData.get("enemyUnitsDestroyed")) || 0,
+    type: formString(formData, "type"),
+    wargear,
+    enhancements,
+    battleHonours,
+    battleScars,
   });
 
   if (!validated.success) {

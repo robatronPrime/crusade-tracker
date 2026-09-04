@@ -2,7 +2,7 @@
 
 import Input from "./Input";
 import ParchmentCard from "@/components/ParchmentCard";
-import UnitFormFields from "./UnitFormFields";
+import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
 import { createForce } from "@/app/actions";
 import { ChangeEvent, useActionState, useMemo, useState } from "react";
 import { slugify } from "@/utils/slugify";
@@ -16,6 +16,15 @@ type DraftUnit = {
   modelCount: number;
   pointsValue: number;
   crusadePoints: number;
+  type: string;
+  xp: number;
+  battlesPlayed: number;
+  battlesSurvived: number;
+  enemyUnitsDestroyed: number;
+  wargear: UnitWargear[];
+  enhancements: UnitWargear[];
+  battleHonours: UnitWargear[];
+  battleScars: UnitWargear[];
 };
 
 const defaultDraft: DraftUnit = {
@@ -23,6 +32,15 @@ const defaultDraft: DraftUnit = {
   modelCount: 0,
   pointsValue: 0,
   crusadePoints: 0,
+  type: "",
+  xp: 0,
+  battlesPlayed: 0,
+  battlesSurvived: 0,
+  enemyUnitsDestroyed: 0,
+  wargear: [],
+  enhancements: [],
+  battleHonours: [],
+  battleScars: [],
 };
 
 const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
@@ -58,6 +76,10 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
     }));
   };
 
+  const handleTraitChange = (key: UnitTraitKey, items: UnitWargear[]): void => {
+    setUnitDraft((unit) => ({ ...unit, [key]: items }));
+  };
+
   const addUnit = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (!unitDraft.name.trim()) return;
@@ -66,13 +88,20 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
     setUnits((current) => [
       ...current,
       {
+        ...unitDraft,
         name: unitDraft.name.trim(),
         modelCount: Number(unitDraft.modelCount || 0),
         pointsValue: Number(unitDraft.pointsValue || 0),
         crusadePoints: Number(unitDraft.crusadePoints || 0),
       },
     ]);
-    setUnitDraft(defaultDraft);
+    setUnitDraft({
+      ...defaultDraft,
+      wargear: [],
+      enhancements: [],
+      battleHonours: [],
+      battleScars: [],
+    });
   };
 
   const removeUnit = (index: number): void => {
@@ -163,7 +192,12 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
               ))}
             </div>
 
-            <UnitFormFields mode="create" values={unitDraft} onChange={handleUnitInput} />
+            <UnitFormFields
+              mode="create"
+              values={unitDraft}
+              onChange={handleUnitInput}
+              onTraitsChange={handleTraitChange}
+            />
             {wouldExceed && (
               <p className="text-danger text-sm">
                 Adding this unit would exceed the supply limit ({supplyUsed + draftPoints} / {supplyLimit}).

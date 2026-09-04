@@ -3,8 +3,7 @@
 import { ChangeEvent, useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateUnit } from "@/app/actions";
-import UnitFormFields from "./UnitFormFields";
-import BackBtn from "./BackBtn";
+import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
 import ParchmentCard from "@/components/ParchmentCard";
 
 type UnitEditFormProps = {
@@ -12,6 +11,13 @@ type UnitEditFormProps = {
   forceId: string;
   supplyLimit: number;
   otherUnitsPoints: number;
+};
+
+const emptyTraits = {
+  wargear: [] as UnitWargear[],
+  enhancements: [] as UnitWargear[],
+  battleHonours: [] as UnitWargear[],
+  battleScars: [] as UnitWargear[],
 };
 
 const UnitEditForm = ({
@@ -28,18 +34,18 @@ const UnitEditForm = ({
     xp: unit.xp ?? 0,
     battlesPlayed: unit.battlesPlayed ?? 0,
     battlesSurvived: unit.battlesSurvived ?? 0,
+    enemyUnitsDestroyed: unit.enemyUnitsDestroyed ?? 0,
+    type: unit.type ?? "",
+    wargear: unit.wargear ?? emptyTraits.wargear,
+    enhancements: unit.enhancements ?? emptyTraits.enhancements,
+    battleHonours: unit.battleHonours ?? emptyTraits.battleHonours,
+    battleScars: unit.battleScars ?? emptyTraits.battleScars,
   });
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(updateUnit, initialState);
 
   const projectedUsed = otherUnitsPoints + Number(values.pointsValue || 0);
   const wouldExceed = supplyLimit > 0 && projectedUsed > supplyLimit;
-
-  useEffect(() => {
-    if (state.success) {
-      router.push("/forces");
-    }
-  }, [state.success, router]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -49,12 +55,13 @@ const UnitEditForm = ({
     }));
   };
 
+  const onTraitsChange = (key: UnitTraitKey, items: UnitWargear[]) => {
+    setValues((v) => ({ ...v, [key]: items }));
+  };
+
   return (
     <ParchmentCard className="my-8">
       <form action={formAction}>
-        <div className="mb-6">
-          <BackBtn url="/forces" />
-        </div>
 
         {!pending && state.message !== "" && (
           <div
@@ -76,7 +83,12 @@ const UnitEditForm = ({
             <h2 className="font-display text-xl uppercase tracking-widest text-ink border-b border-brass/40 pb-2">
               Edit Unit
             </h2>
-            <UnitFormFields mode="fullEdit" values={values} onChange={onChange} />
+            <UnitFormFields
+              mode="fullEdit"
+              values={values}
+              onChange={onChange}
+              onTraitsChange={onTraitsChange}
+            />
           </div>
 
           {/* Right: supply + save */}

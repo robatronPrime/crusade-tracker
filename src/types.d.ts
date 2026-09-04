@@ -39,8 +39,6 @@ type Unit = {
   battleHonours?: UnitWargear[];
   battleScars?: UnitWargear[];
   type?: string;
-  /** @deprecated legacy embedded units only — prefer `name` */
-  unitName?: string;
 };
 
 type UserForceRef = {

@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/PageHeader";
-import UnitEditForm from "@/components/UnitEditForm";
+import UnitPage from "@/components/UnitPage";
 
 type PageProps = {
   params: Promise<{ id: string; unitId: string }>;
 };
 
-export default async function UnitEditPage({ params }: PageProps) {
+export default async function UnitDetailPage({ params }: PageProps) {
   const { id: forceId, unitId } = await params;
 
   const unitRes = await fetch(`${process.env.LOCALHOST}/api/units/${unitId}`, {
@@ -28,6 +28,12 @@ export default async function UnitEditPage({ params }: PageProps) {
     xp: Number(rawUnit.xp ?? 0),
     battlesPlayed: Number(rawUnit.battlesPlayed ?? 0),
     battlesSurvived: Number(rawUnit.battlesSurvived ?? 0),
+    enemyUnitsDestroyed: Number(rawUnit.enemyUnitsDestroyed ?? 0),
+    type: rawUnit.type ?? "",
+    wargear: Array.isArray(rawUnit.wargear) ? rawUnit.wargear : [],
+    enhancements: Array.isArray(rawUnit.enhancements) ? rawUnit.enhancements : [],
+    battleHonours: Array.isArray(rawUnit.battleHonours) ? rawUnit.battleHonours : [],
+    battleScars: Array.isArray(rawUnit.battleScars) ? rawUnit.battleScars : [],
   };
 
   const mongoForceId = String(rawUnit.forceId ?? forceId);
@@ -48,15 +54,8 @@ export default async function UnitEditPage({ params }: PageProps) {
 
   return (
     <>
-      <PageHeader title="Edit Unit" backHref="/forces" backLabel="← Orders of Battle" />
-      <div className="col-span-12">
-        <UnitEditForm
-          unit={unit}
-          forceId={mongoForceId}
-          supplyLimit={supplyLimit}
-          otherUnitsPoints={otherUnitsPoints}
-        />
-      </div>
+      <PageHeader title={unit.name} backHref="/forces" backLabel="← Orders of Battle" />
+      <UnitPage unit={unit} forceId={mongoForceId} supplyLimit={supplyLimit} otherUnitsPoints={otherUnitsPoints} />
     </>
   );
 }
