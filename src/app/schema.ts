@@ -16,7 +16,7 @@ export const forceSchema = z.object({
   supplyLimit: z.number().int().nonnegative().optional(),
   battleTally: z.number().int().nonnegative().optional(),
   requisitionPoints: z.number().int().nonnegative().optional(),
-  recordOfAchievement: z.array(z.string()).optional(),
+  recordOfAchievement: z.string().optional(),
 });
 
 export const addUnitSchema = z.object({

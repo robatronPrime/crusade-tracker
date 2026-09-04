@@ -15,9 +15,13 @@ type ForceEditFormProps = {
   victories: number;
   battleTally: number;
   requisitionPoints: number;
+  recordOfAchievement?: string | string[];
 };
 
-const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victories, battleTally, requisitionPoints }: ForceEditFormProps): JSX.Element => {
+const toRecordText = (value: string | string[] | undefined): string =>
+  Array.isArray(value) ? value.join("\n") : (value ?? "");
+
+const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement }: ForceEditFormProps): JSX.Element => {
   const [values, setValues] = useState({
     name: forceName ?? "",
     supplyLimit: supplyLimit,
@@ -25,6 +29,7 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
     victories: victories,
     battleTally: battleTally,
     requisitionPoints: requisitionPoints,
+    recordOfAchievement: toRecordText(recordOfAchievement),
   });
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(updateForce, initialState);
@@ -35,7 +40,7 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
     [units]
   );
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
@@ -71,11 +76,11 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
                 <Input name="victories" type="number" label="Victories" value={values.victories} onChange={handleInputChange} />
                 <Input name="battleTally" type="number" label="Battle Tally" value={values.battleTally} onChange={handleInputChange} />
                 <Input name="requisitionPoints" type="number" label="Requisition Points" value={values.requisitionPoints} onChange={handleInputChange} />
-                
+                <Input name="recordOfAchievement" type="textarea" label="Record of Achievements" value={values.recordOfAchievement} onChange={handleInputChange} />
                 <input type="hidden" name="id" value={forceId} />
                 <input type="hidden" name="userId" value={userId} />
             </div>
-            <button type="submit" disabled={pending} className="bg-ink text-bg text-white px-4 py-2 rounded-md hover:bg-ink/80 transition-colors">{pending ? "Updating..." : "Update"}</button>
+            <button type="submit" disabled={pending} className="inline-block bg-brass text-ink font-bold px-5 py-2 rounded uppercase tracking-widest text-sm hover:bg-brass-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2">{pending ? "Updating..." : "Update"}</button>
         </form>
     </ParchmentCard>
   );

@@ -31,6 +31,7 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
   const [name, setName] = useState("");
   const [supplyLimit, setSupplyLimit] = useState(0);
   const [unitDraft, setUnitDraft] = useState<DraftUnit>(defaultDraft);
+  const [recordOfAchievement, setRecordOfAchievement] = useState("");
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(createForce, initialState);
 
@@ -113,6 +114,7 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
             <Input name="victories" type="number" label="Victories" />
             <Input name="battleTally" type="number" label="Battle Tally" />
             <Input name="requisitionPoints" type="number" label="Requisition Points" />
+            <Input name="recordOfAchievement" type="textarea" label="Record of Achievements" value={recordOfAchievement} onChange={(e) => setRecordOfAchievement(e.target.value)} />
 
             <input type="hidden" name="units" value={JSON.stringify(units)} />
             <input type="hidden" name="id" value={id} />

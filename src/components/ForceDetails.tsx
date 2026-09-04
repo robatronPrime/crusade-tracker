@@ -1,6 +1,5 @@
 import { JSX } from "react";
 import UnitQuickActions from "./UnitQuickActions";
-import ForceDeleteButton from "./ForceDeleteButton";
 import StatBlock from "./StatBlock";
 import Link from "next/link";
 
@@ -19,6 +18,14 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
     requisitionPoints,
     recordOfAchievement,
   } = forceProps;
+
+  const recordText = Array.isArray(recordOfAchievement)
+    ? recordOfAchievement.join("\n")
+    : (recordOfAchievement ?? "");
+  const recordLines = recordText
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 
   const forceId = String(forceProps._id || forceProps.id || "");
 
@@ -45,18 +52,16 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
 
       <div className="mt-8">
         <p className="text-xs uppercase tracking-widest text-ink/60 mb-2">Record of Achievement</p>
-        {!recordOfAchievement || recordOfAchievement.length === 0 ? (
+        {!recordLines.length ? (
           <p className="text-ink/50 text-sm">No records.</p>
         ) : (
           <ul className="list-disc list-inside text-sm space-y-1">
-            {recordOfAchievement.map((item) => (
-              <li key={item}>{item}</li>
+            {recordLines.map((line) => (
+              <li key={line}>{line}</li>
             ))}
           </ul>
         )}
       </div>
-
-      <ForceDeleteButton forceId={forceId} forceName={name} />
     </div>
   );
 };
