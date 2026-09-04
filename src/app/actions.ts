@@ -215,3 +215,59 @@ export async function deleteForce(forceId: string): Promise<CreateFormState> {
     return { success: false, message: "Network error deleting force." };
   }
 }
+
+export async function updateForce(
+  prevState: CreateFormState,
+  formData: FormData
+): Promise<CreateFormState> {
+  const validated = forceSchema.safeParse({
+    id: formData.get("id"),
+    name: formData.get("name"),
+    supplyLimit: Number(formData.get("supplyLimit")) || 0,
+    userId: formData.get("userId"),
+    victories: Number(formData.get("victories")) || 0,
+    battleTally: Number(formData.get("battleTally")) || 0,
+    requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
+  });
+
+  if (!validated.success) {
+    return { success: false, message: "Validation failed." };
+  }
+
+  const { id, name, supplyLimit, victories, battleTally, requisitionPoints } = validated.data;
+
+  try {
+    const response = await fetch(`${process.env.LOCALHOST}/api/forces/${id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ name, supplyLimit, victories, battleTally, requisitionPoints }),
+    });
+
+    const text = await response.text();
+    let data: { error?: string; supplyUsed?: number; supplyLimit?: number } = {};
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = {};
+      }
+    }
+
+    if (!response.ok) {
+      if (data?.error === "Supply limit exceeded") {
+        return {
+          success: false,
+          message: `Supply limit exceeded (${data.supplyUsed}/${data.supplyLimit}).`,
+        };
+      }
+      return { success: false, message: data?.error ?? "Failed to update force." };
+    }
+
+    revalidatePath("/forces");
+    revalidatePath(`/forces/${id}/edit`);
+    return { success: true, message: "Force updated." };
+  } catch (error) {
+    console.error("Failed to update force:", error);
+    return { success: false, message: "Network error updating force." };
+  }
+}

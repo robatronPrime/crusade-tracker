@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { JSX, useState, useTransition } from "react";
 import { deleteForce } from "@/app/actions";
 
 type ForceDeleteButtonProps = {

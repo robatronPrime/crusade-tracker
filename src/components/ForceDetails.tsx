@@ -2,6 +2,7 @@ import { JSX } from "react";
 import UnitQuickActions from "./UnitQuickActions";
 import ForceDeleteButton from "./ForceDeleteButton";
 import StatBlock from "./StatBlock";
+import Link from "next/link";
 
 interface ForceProps {
   forceProps: Force & { _id?: string };
@@ -30,6 +31,9 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
         <StatBlock label="Victories" value={victories ?? 0} />
         <StatBlock label="Requisition" value={requisitionPoints ?? 0} />
         <StatBlock label="Supply" value={`${supplyUsed ?? 0} / ${supplyLimit}`} />
+        <Link className="text-brass text-xs underline hover:text-brass-hover" href={`/forces/${forceId}/edit`}>
+          Edit
+        </Link>
       </div>
 
       <UnitQuickActions

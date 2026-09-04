@@ -8,7 +8,7 @@ export const forceUnitSchema = z.object({
 });
 
 export const forceSchema = z.object({
-  id: z.string(),
+  id: z.string().min(1),
   name: z.string().min(1),
   userId: z.string().min(1),
   victories: z.number().int().nonnegative().optional(),
