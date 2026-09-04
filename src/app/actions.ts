@@ -8,6 +8,11 @@ import {
   updateUnitSchema,
 } from "./schema";
 
+function formString(formData: FormData, key: string): string {
+  const raw = formData.get(key);
+  return typeof raw === "string" ? raw : "";
+}
+
 function parseUnitsField(raw: FormDataEntryValue | null) {
   if (raw == null || raw === "") return [];
   if (typeof raw !== "string") return null;
@@ -48,6 +53,7 @@ export async function createForce(
     victories: Number(formData.get("victories")) || 0,
     battleTally: Number(formData.get("battleTally")) || 0,
     requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
+    recordOfAchievement: formString(formData, "recordOfAchievement"),
   });
 
   if (!validatedFields.success) {
@@ -228,19 +234,28 @@ export async function updateForce(
     victories: Number(formData.get("victories")) || 0,
     battleTally: Number(formData.get("battleTally")) || 0,
     requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
+    recordOfAchievement: formString(formData, "recordOfAchievement"),
   });
 
   if (!validated.success) {
     return { success: false, message: "Validation failed." };
   }
 
-  const { id, name, supplyLimit, victories, battleTally, requisitionPoints } = validated.data;
+  const { id, name, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement } =
+    validated.data;
 
   try {
     const response = await fetch(`${process.env.LOCALHOST}/api/forces/${id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ name, supplyLimit, victories, battleTally, requisitionPoints }),
+      body: JSON.stringify({
+        name,
+        supplyLimit,
+        victories,
+        battleTally,
+        requisitionPoints,
+        recordOfAchievement: recordOfAchievement ?? "",
+      }),
     });
 
     const text = await response.text();

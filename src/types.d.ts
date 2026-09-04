@@ -8,7 +8,7 @@ type Force = {
   supplyLimit: number;
   battleTally: number;
   requisitionPoints: number;
-  recordOfAchievement: string[]; // or a better type if you know it
+  recordOfAchievement: string | string[];
 }
 
 type CrusadeUser = {
