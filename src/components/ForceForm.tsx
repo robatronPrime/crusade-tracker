@@ -5,6 +5,7 @@ import ParchmentCard from "@/components/ParchmentCard";
 import UnitFormFields from "./UnitFormFields";
 import { createForce } from "@/app/actions";
 import { ChangeEvent, useActionState, useMemo, useState } from "react";
+import { slugify } from "@/utils/slugify";
 
 type ForceFormProps = {
   userId: string;
@@ -47,14 +48,6 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
     setName(value);
     setId(slugify(value));
   };
-
-  const slugify = (text: string): string =>
-    text
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/--+/g, "-");
 
   const handleUnitInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name: field, value, type } = e.target;
