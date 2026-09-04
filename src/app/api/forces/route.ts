@@ -1,4 +1,3 @@
-import { error } from "console";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -30,23 +29,14 @@ export async function POST(req: NextRequest) {
   try {
     const response = await fetch(`${process.env.API_URL}/forces`, {
       method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      next: { revalidate: 60 },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify(body)
     });
 
-    if (!response.ok) {
-      return new Response(JSON.stringify({ error: "Upstream API error" }), {
-        status: 500
-      });
-    }
-
     const data = await response.json();
-
-    return new Response(JSON.stringify(data), { status: 200 });
+    return new Response(JSON.stringify(data), { status: response.status });
   } catch (error) {
+    console.error(error);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
       status: 500
     });

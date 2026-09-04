@@ -24,3 +24,20 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     });
   }
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const id = (await params).id;
+
+  try {
+    const response = await fetch(`${process.env.API_URL}/forces/${id}`, {
+      method: "DELETE"
+    });
+    const data = await response.json();
+    return new Response(JSON.stringify(data), { status: response.status });
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500
+    });
+  }
+}

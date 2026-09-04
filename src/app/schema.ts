@@ -1,22 +1,39 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const forceUnitSchema = z.object({
+  name: z.string().min(1),
   modelCount: z.number().int().nonnegative(),
-  id: z.number().int(),
-  name: z.string(),
   pointsValue: z.number().int().nonnegative(),
-  crusadePoints: z.number().int().nonnegative(),
+  crusadePoints: z.number().int().nonnegative().default(0),
 });
 
 export const forceSchema = z.object({
   id: z.string(),
-  name: z.string(),
-  userId: z.string(),
-  victories: z.optional(z.number().int().nonnegative()),
-  units: z.optional(z.string()),
-  supplyUsed: z.optional(z.number().int().nonnegative()),
-  supplyLimit: z.optional(z.number().int().nonnegative()),
-  battleTally: z.optional(z.number().int().nonnegative()),
-  requisitionPoints: z.optional(z.number().int().nonnegative()),
-  recordOfAchievement: z.optional(z.array(z.string())),
+  name: z.string().min(1),
+  userId: z.string().min(1),
+  victories: z.number().int().nonnegative().optional(),
+  units: z.array(forceUnitSchema).optional(),
+  supplyLimit: z.number().int().nonnegative().optional(),
+  battleTally: z.number().int().nonnegative().optional(),
+  requisitionPoints: z.number().int().nonnegative().optional(),
+  recordOfAchievement: z.array(z.string()).optional(),
+});
+
+export const addUnitSchema = z.object({
+  forceId: z.string().min(1),
+  name: z.string().min(1),
+  modelCount: z.number().int().nonnegative(),
+  pointsValue: z.number().int().nonnegative(),
+  crusadePoints: z.number().int().nonnegative().optional(),
+});
+
+export const updateUnitSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  modelCount: z.number().int().nonnegative(),
+  pointsValue: z.number().int().nonnegative(),
+  crusadePoints: z.number().int().nonnegative(),
+  xp: z.number().int().nonnegative(),
+  battlesPlayed: z.number().int().nonnegative(),
+  battlesSurvived: z.number().int().nonnegative(),
 });

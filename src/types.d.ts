@@ -24,21 +24,24 @@ type UnitWargear = {
 }
 
 type Unit = {
-  id: number;
-  xp: number;
-  type: string;
-  unitName: string;
+  id: string;
+  forceId?: string;
+  name: string;
   modelCount: number;
   pointsValue: number;
   crusadePoints: number;
+  xp: number;
   battlesPlayed: number;
-  wargear?: UnitWargear[];
   battlesSurvived: number;
-  battleScars?: UnitWargear[];
-  enhancements?: UnitWargear[];
   enemyUnitsDestroyed?: number;
+  wargear?: UnitWargear[];
+  enhancements?: UnitWargear[];
   battleHonours?: UnitWargear[];
-}
+  battleScars?: UnitWargear[];
+  type?: string;
+  /** @deprecated legacy embedded units only — prefer `name` */
+  unitName?: string;
+};
 
 type UserForceRef = {
   forceRef: number;
