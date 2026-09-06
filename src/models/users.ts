@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { User } from "../../types/global";
 
 const userSchema: Schema = new mongoose.Schema<User>({
   clerkID: {
