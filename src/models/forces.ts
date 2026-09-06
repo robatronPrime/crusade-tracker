@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { Force } from "../../types/global";
 
 const forceSchema: Schema = new mongoose.Schema<Force>({
   id: {
