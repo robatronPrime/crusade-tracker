@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { Unit } from "../../types/global";
 
 const unitSchema: Schema = new mongoose.Schema<Unit>({
   modelCount: {
