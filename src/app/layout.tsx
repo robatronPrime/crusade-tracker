@@ -47,8 +47,6 @@ export default async function RootLayout({
           forces: []
         })
       });
-
-      const data = await res.json();
     } catch (error) {
       console.error(error);
     }
