@@ -31,6 +31,7 @@ export default async function ForcesPage() {
 
     return <Forces data={data} />;
   } catch (err: unknown) {
+    console.log(err);
     return notFound();
   }
 }
