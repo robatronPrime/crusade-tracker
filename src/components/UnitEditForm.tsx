@@ -1,10 +1,9 @@
 "use client";
 
-import { ChangeEvent, useActionState, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { updateUnit } from "@/app/actions";
-import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
 import ParchmentCard from "@/components/ParchmentCard";
+import { ChangeEvent, useActionState, useState } from "react";
+import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
 
 type UnitEditFormProps = {
   unit: Unit;
@@ -25,7 +24,6 @@ const UnitEditForm = ({
   supplyLimit,
   otherUnitsPoints,
 }: UnitEditFormProps) => {
-  const router = useRouter();
   const [values, setValues] = useState({
     name: unit.name ?? "",
     modelCount: unit.modelCount ?? 0,
