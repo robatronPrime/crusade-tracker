@@ -10,7 +10,6 @@ type ForceUpdateButtonProps = {
 
 const ForceUpdateButton = ({ forceId, forceName }: ForceUpdateButtonProps): JSX.Element => {
   const [isPending, startTransition] = useTransition();
-  const initialState: CreateFormState = { message: "", success: false };
   const [updateState, setUpdateState] = useState<CreateFormState | null>(null);
 
   const onUpdate = () => {
