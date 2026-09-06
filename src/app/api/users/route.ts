@@ -6,7 +6,7 @@ interface UserRequestBody {
   forces: ObjectId[];
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const response = await fetch(`${process.env.API_URL}/users`, {
       next: { revalidate: 60 }
