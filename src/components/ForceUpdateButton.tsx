@@ -1,7 +1,6 @@
 "use client";
 
 import { JSX, useState, useTransition } from "react";
-import { updateForce } from "@/app/actions";
 
 type ForceUpdateButtonProps = {
   forceId: string;
@@ -10,6 +9,7 @@ type ForceUpdateButtonProps = {
 
 const ForceUpdateButton = ({ forceId, forceName }: ForceUpdateButtonProps): JSX.Element => {
   const [isPending, startTransition] = useTransition();
+  const initialState: CreateFormState = { message: "", success: false };
   const [updateState, setUpdateState] = useState<CreateFormState | null>(null);
 
   const onUpdate = () => {
@@ -17,7 +17,7 @@ const ForceUpdateButton = ({ forceId, forceName }: ForceUpdateButtonProps): JSX.
       return;
     }
     startTransition(async () => {
-      const result = await updateForce(forceId, forceName);
+      const result = await updateForceById(forceId, forceName);
       if (!result.success) {        
         setUpdateState(result);
       } else {
