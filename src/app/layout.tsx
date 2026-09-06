@@ -34,23 +34,26 @@ export default async function RootLayout({
 }>) {
   const user = await currentUser();
 
-  // Create user in DB
-  if (user) {
-    try {
-      const res = await fetch(`${process.env.LOCALHOST}/api/users`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json"
-        },
-        body: JSON.stringify({
-          clerkID: user.id,
-          forces: []
-        })
-      });
-    } catch (error) {
-      console.error(error);
+if (user) {
+  try {
+    const response = await fetch(`${process.env.LOCALHOST}/api/users`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        clerkID: user.id,
+        forces: [],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to create user: ${response.status}`);
     }
+  } catch (error) {
+    console.error(error);
   }
+}
 
   return (
     <ClerkProvider>
