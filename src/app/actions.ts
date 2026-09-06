@@ -287,7 +287,7 @@ export async function deleteForce(forceId: string): Promise<CreateFormState> {
 }
 
 export async function updateForce(
-  prevState: CreateFormState,
+  prevState: string,
   formData: FormData
 ): Promise<CreateFormState> {
   const validated = forceSchema.safeParse({
