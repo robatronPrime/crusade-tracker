@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const response = await fetch(`${process.env.API_URL}/forces`, {
       next: { revalidate: 60 }
