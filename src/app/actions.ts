@@ -7,6 +7,7 @@ import {
   forceUnitSchema,
   updateUnitSchema,
 } from "./schema";
+import { getSiteUrl } from "@/lib/siteUrl";
 
 function formString(formData: FormData, key: string): string {
   const raw = formData.get(key);
@@ -94,7 +95,7 @@ export async function createForce(
   }
 
   try {
-    const response = await fetch(`${process.env.LOCALHOST}/api/forces`, {
+    const response = await fetch(`${getSiteUrl()}/api/forces`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(validatedFields.data),
@@ -154,7 +155,7 @@ export async function addUnit(
   }
 
   try {
-    const response = await fetch(`${process.env.LOCALHOST}/api/units`, {
+    const response = await fetch(`${getSiteUrl()}/api/units`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(validated.data),
@@ -215,7 +216,7 @@ export async function updateUnit(
   const { id, ...body } = validated.data;
 
   try {
-    const response = await fetch(`${process.env.LOCALHOST}/api/units/${id}`, {
+    const response = await fetch(`${getSiteUrl()}/api/units/${id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(body),
@@ -246,7 +247,7 @@ export async function deleteUnit(unitId: string): Promise<CreateFormState> {
   }
 
   try {
-    const response = await fetch(`${process.env.LOCALHOST}/api/units/${unitId}`, {
+    const response = await fetch(`${getSiteUrl()}/api/units/${unitId}`, {
       method: "DELETE",
     });
     const data = await response.json();
@@ -269,7 +270,7 @@ export async function deleteForce(forceId: string): Promise<CreateFormState> {
   }
 
   try {
-    const response = await fetch(`${process.env.LOCALHOST}/api/forces/${forceId}`, {
+    const response = await fetch(`${getSiteUrl()}/api/forces/${forceId}`, {
       method: "DELETE",
     });
     const data = await response.json();
@@ -309,7 +310,7 @@ export async function updateForce(
     validated.data;
 
   try {
-    const response = await fetch(`${process.env.LOCALHOST}/api/forces/${id}`, {
+    const response = await fetch(`${getSiteUrl()}/api/forces/${id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

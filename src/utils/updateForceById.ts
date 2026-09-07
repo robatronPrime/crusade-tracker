@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { getSiteUrl } from "@/lib/siteUrl";
 
 export async function updateForceById(
   forceId: string,
@@ -6,7 +7,7 @@ export async function updateForceById(
 ): Promise<CreateFormState> {
   try {
     const response = await fetch(
-      `${process.env.LOCALHOST}/api/forces/${forceId}`,
+      `${getSiteUrl()}/api/forces/${forceId}`,
       {
         method: "PATCH",
         headers: {
