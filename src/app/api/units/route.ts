@@ -1,21 +1,11 @@
 import { NextRequest } from "next/server";
+import { proxyToApi } from "@/lib/proxyToApi";
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-
-  try {
-    const response = await fetch(`${process.env.API_URL}/units`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body)
-    });
-
-    const data = await response.json();
-    return new Response(JSON.stringify(data), { status: response.status });
-  } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
-      status: 500
-    });
-  }
+  const body = await req.text();
+  return proxyToApi("/units", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body,
+  });
 }
