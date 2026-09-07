@@ -95,47 +95,69 @@ const UnitQuickActions = ({
 
   return (
     <div className="mt-4">
-      {/* Unit table header */}
-      <div className="grid grid-cols-12 gap-4 w-full mb-2 text-xs uppercase tracking-widest text-ink/60">
-        <div className="col-span-5 lg:col-span-6">Units</div>
-        <div className="col-span-1 text-center">XP</div>
-        <div className="col-span-1 text-center">Pts</div>
-        <div className="col-span-1 text-center">Mdl</div>
-        <div className="col-span-1 text-center">CP</div>
-        <div className="col-span-3 lg:col-span-2">Actions</div>
+      {/* Unit table header — desktop */}
+      <div className="hidden md:grid grid-cols-12 gap-4 w-full mb-2 text-xs uppercase tracking-widest text-ink/60">
+        <div className="col-span-5 lg:col-span-6"><p>Units</p></div>
+        <div className="col-span-1 text-center"><p>XP</p></div>
+        <div className="col-span-1 text-center"><p>Pts</p></div>
+        <div className="col-span-1 text-center"><p>Mdl</p></div>
+        <div className="col-span-1 text-center"><p>CP</p></div>
+        <div className="col-span-3 lg:col-span-2"><p>Actions</p></div>
       </div>
 
       {units?.map((unit) => {
         const managed = isManagedUnit(unit);
         const label = unit.name;
+        const stats = [
+          { label: "XP", value: unit.xp ?? 0 },
+          { label: "Pts", value: unit.pointsValue },
+          { label: "Mdl", value: unit.modelCount },
+          { label: "CP", value: unit.crusadePoints }
+        ];
+        const actions = managed ? (
+          <>
+            <Link
+              className="text-brass text-sm md:text-xs underline hover:text-brass-hover py-1"
+              href={`/forces/${forceId}/units/${unit.id}`}
+            >
+              View
+            </Link>
+            <button
+              type="button"
+              className="text-danger text-sm md:text-xs underline hover:text-danger-hover disabled:opacity-50 py-1"
+              disabled={isPending}
+              onClick={() => onDelete(String(unit.id), label)}
+            >
+              Delete
+            </button>
+          </>
+        ) : (
+          <span className="text-ink/40 text-xs">Legacy</span>
+        );
+
         return (
-          <div
-            key={String(unit.id ?? label)}
-            className="col-span-12 grid grid-cols-12 gap-4 w-full items-center mb-1 py-1 border-b border-brass/20 text-sm"
-          >
-            <div className="col-span-5 lg:col-span-6 font-medium">{label}</div>
-            <div className="col-span-1 text-center">{unit.xp ?? 0}</div>
-            <div className="col-span-1 text-center">{unit.pointsValue}</div>
-            <div className="col-span-1 text-center">{unit.modelCount}</div>
-            <div className="col-span-1 text-center">{unit.crusadePoints}</div>
-            <div className="col-span-3 lg:col-span-2 flex gap-2">
-              {managed ? (
-                <>
-                  <Link className="text-brass text-xs underline hover:text-brass-hover" href={`/forces/${forceId}/units/${unit.id}`}>
-                    View
-                  </Link>
-                  <button
-                    type="button"
-                    className="text-danger text-xs underline hover:text-danger-hover disabled:opacity-50"
-                    disabled={isPending}
-                    onClick={() => onDelete(String(unit.id), label)}
-                  >
-                    Delete
-                  </button>
-                </>
-              ) : (
-                <span className="text-ink/40 text-xs">Legacy</span>
-              )}
+          <div key={String(unit.id ?? label)} className="border-b border-brass/20">
+            <div className="md:hidden py-3">
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <p className="font-medium leading-snug min-w-0">{label}</p>
+                <div className="flex gap-3 shrink-0">{actions}</div>
+              </div>
+              <dl className="grid grid-cols-4 gap-2 text-center">
+                {stats.map((stat) => (
+                  <div key={stat.label}>
+                    <dt className="text-[10px] uppercase tracking-widest text-ink/50">{stat.label}</dt>
+                    <dd className="text-sm font-medium">{stat.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div className="hidden md:grid grid-cols-12 gap-4 w-full items-center py-1 text-sm">
+              <div className="col-span-5 lg:col-span-6 font-medium"><p>{label}</p></div>
+              {stats.map((stat) => (
+                <div key={stat.label} className="col-span-1 text-center">{stat.value}</div>
+              ))}
+              <div className="col-span-3 lg:col-span-2 flex gap-2">{actions}</div>
             </div>
           </div>
         );

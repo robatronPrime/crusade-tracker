@@ -59,8 +59,10 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <h3 className="font-display text-2xl lg:text-3xl text-ink tracking-widest uppercase col-span-2">{forceName}</h3>
 
-                <Input name="name" label="Name" type="text" value={values.name} onChange={handleInputChange} />
-                <div className="col-span-1">
+                <div className="col-span-full md:col-span-1">
+                  <Input name="name" label="Name" type="text" value={values.name} onChange={handleInputChange} />
+                </div>
+                <div className="col-span-full md:col-span-1">
                     <Input
                         name="supplyLimit"
                         type="number"
@@ -73,10 +75,18 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
                     </p>
                 </div>
 
-                <Input name="victories" type="number" label="Victories" value={values.victories} onChange={handleInputChange} />
-                <Input name="battleTally" type="number" label="Battle Tally" value={values.battleTally} onChange={handleInputChange} />
-                <Input name="requisitionPoints" type="number" label="Requisition Points" value={values.requisitionPoints} onChange={handleInputChange} />
-                <Input name="recordOfAchievement" type="textarea" label="Record of Achievements" value={values.recordOfAchievement} onChange={handleInputChange} />
+                <div className="col-span-full md:col-span-1">
+                  <Input name="victories" type="number" label="Victories" value={values.victories} onChange={handleInputChange} />
+                </div>
+                <div className="col-span-full md:col-span-1">
+                  <Input name="battleTally" type="number" label="Battle Tally" value={values.battleTally} onChange={handleInputChange} />
+                </div>
+                <div className="col-span-full md:col-span-1">
+                  <Input name="requisitionPoints" type="number" label="Requisition Points" value={values.requisitionPoints} onChange={handleInputChange} />
+                </div>
+                <div className="col-span-full md:col-span-1">
+                  <Input name="recordOfAchievement" type="textarea" label="Record of Achievements" value={values.recordOfAchievement} onChange={handleInputChange} />
+                </div>
                 <input type="hidden" name="id" value={forceId} />
                 <input type="hidden" name="userId" value={userId} />
             </div>

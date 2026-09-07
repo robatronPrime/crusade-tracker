@@ -123,7 +123,7 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
           </div>
         )}
 
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-12 gap-4 mdgap-6">
           {/* Left: force details */}
           <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
             <h2 className="font-display text-xl uppercase tracking-widest text-ink border-b border-brass/40 pb-2">
