@@ -4,11 +4,15 @@ import { getApiUrl } from "./siteUrl";
 export async function proxyToApi(path: string, init: RequestInit = {}): Promise<Response> {
   const { getToken } = await auth();
   const token = await getToken();
-  const headers = new Headers(init.headers);
-
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
+  if (!token) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "content-type": "application/json" },
+    });
   }
+
+  const headers = new Headers(init.headers);
+  headers.set("Authorization", `Bearer ${token}`);
 
   try {
     const upstream = await fetch(`${getApiUrl()}${path}`, {

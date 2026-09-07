@@ -2,7 +2,7 @@ import ForceDetails from "@/components/ForceDetails";
 import PageHeader from "@/components/PageHeader";
 import ParchmentCard from "@/components/ParchmentCard";
 import { notFound } from "next/navigation";
-import { getSiteUrl } from "@/lib/siteUrl";
+import { fetchSiteApi } from "@/lib/fetchSiteApi";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -11,9 +11,7 @@ type PageProps = {
 export default async function ForcePage({ params }: PageProps) {
   const { id } = await params;
 
-  const forceRes = await fetch(`${getSiteUrl()}/api/forces/${id}`, {
-    cache: "no-store",
-  });
+  const forceRes = await fetchSiteApi(`/api/forces/${id}`);
 
   if (!forceRes.ok) {
     return notFound();

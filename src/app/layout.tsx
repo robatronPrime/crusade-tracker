@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Geist, Geist_Mono, Cinzel } from "next/font/google";
 import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
 import PageShell from "@/components/PageShell";
-import { getSiteUrl } from "@/lib/siteUrl";
+import { fetchSiteApi } from "@/lib/fetchSiteApi";
 
 
 const geistSans = Geist({
@@ -37,7 +37,7 @@ export default async function RootLayout({
 
 if (user) {
   try {
-    const response = await fetch(`${getSiteUrl()}/api/users`, {
+    const response = await fetchSiteApi("/api/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",

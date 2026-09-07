@@ -1,23 +1,20 @@
 import { revalidatePath } from "next/cache";
-import { getSiteUrl } from "@/lib/siteUrl";
+import { fetchSiteApi } from "@/lib/fetchSiteApi";
 
 export async function updateForceById(
   forceId: string,
   forceName: string
 ): Promise<CreateFormState> {
   try {
-    const response = await fetch(
-      `${getSiteUrl()}/api/forces/${forceId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          name: forceName,
-        }),
-      }
-    );
+    const response = await fetchSiteApi(`/api/forces/${forceId}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        name: forceName,
+      }),
+    });
 
     const data = await response.json().catch(() => ({}));
 

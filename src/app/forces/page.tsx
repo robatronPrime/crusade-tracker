@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Forces from "../pageTemplates/Forces";
 import { currentUser } from "@clerk/nextjs/server";
-import { getSiteUrl } from "@/lib/siteUrl";
+import { fetchSiteApi } from "@/lib/fetchSiteApi";
 
 export default async function ForcesPage() {
   const user = await currentUser();
@@ -9,9 +9,7 @@ export default async function ForcesPage() {
   const getForces = async (): Promise<CrusadeUser | null> => {
     if (user) {
       try {
-        const res = await fetch(`${getSiteUrl()}/api/users/${user.id}/forces`, {
-          cache: "no-store",
-        });
+        const res = await fetchSiteApi(`/api/users/${user.id}/forces`);
 
         if (!res.ok) {
           console.log(`Failed to fetch forces (status: ${res.status})`);

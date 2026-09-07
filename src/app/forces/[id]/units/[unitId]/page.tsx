@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getSiteUrl } from "@/lib/siteUrl";
+import { fetchSiteApi } from "@/lib/fetchSiteApi";
 import PageHeader from "@/components/PageHeader";
 import UnitPage from "@/components/UnitPage";
 
@@ -10,9 +10,7 @@ type PageProps = {
 export default async function UnitDetailPage({ params }: PageProps) {
   const { id: forceId, unitId } = await params;
 
-  const unitRes = await fetch(`${getSiteUrl()}/api/units/${unitId}`, {
-    cache: "no-store",
-  });
+  const unitRes = await fetchSiteApi(`/api/units/${unitId}`);
 
   if (!unitRes.ok) {
     return notFound();
@@ -38,9 +36,7 @@ export default async function UnitDetailPage({ params }: PageProps) {
   };
 
   const mongoForceId = String(rawUnit.forceId ?? forceId);
-  const forceRes = await fetch(`${getSiteUrl()}/api/forces/${mongoForceId}`, {
-    cache: "no-store",
-  });
+  const forceRes = await fetchSiteApi(`/api/forces/${mongoForceId}`);
 
   if (!forceRes.ok) {
     return notFound();
