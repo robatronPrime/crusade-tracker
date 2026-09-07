@@ -10,7 +10,7 @@ type PageHeaderProps = {
 
 export default function PageHeader({ title, backHref, backLabel = "← Back" }: PageHeaderProps): JSX.Element {
   return (
-    <div className="col-span-12 flex items-center gap-4 mb-6">
+    <div className="col-span-12 flex flex-col md:flex-row md:items-center gap-4 mb-6">
       {backHref && (
         <Link href={backHref} className="text-brass text-sm hover:text-brass-hover transition-colors">
           {backLabel}

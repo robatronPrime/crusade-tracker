@@ -75,7 +75,7 @@ const UnitEditForm = ({
 
         <input type="hidden" name="id" value={unit.id} />
 
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-12 gap-4 md:gap-6">
           {/* Left: identity + points */}
           <div className="col-span-12 lg:col-span-6 flex flex-col gap-4">
             <h2 className="font-display text-xl uppercase tracking-widest text-ink border-b border-brass/40 pb-2">
