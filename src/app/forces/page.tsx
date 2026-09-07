@@ -8,7 +8,9 @@ export default async function ForcesPage() {
   const getForces = async (): Promise<CrusadeUser | null> => {
     if (user) {
       try {
-        const res = await fetch(`${process.env.LOCALHOST}/api/users/${user.id}/forces`, );
+        const res = await fetch(`${process.env.LOCALHOST}/api/users/${user.id}/forces`, {
+          cache: "no-store",
+        });
 
         if (!res.ok) {
           console.log(`Failed to fetch forces (status: ${res.status})`);

@@ -1,3 +1,5 @@
+import { revalidatePath } from "next/cache";
+
 export async function updateForceById(
   forceId: string,
   forceName: string

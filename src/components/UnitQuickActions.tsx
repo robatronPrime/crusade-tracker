@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useActionState, useEffect, useState, useTransition } from "react";
 import { addUnit, deleteUnit } from "@/app/actions";
 import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
@@ -42,26 +43,27 @@ const UnitQuickActions = ({
   const [state, formAction, pending] = useActionState(addUnit, initialState);
   const [isPending, startTransition] = useTransition();
   const [deleteState, setDeleteState] = useState<CreateFormState | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    if (state.success) {
-      setDraft({
-        name: "",
-        modelCount: 0,
-        pointsValue: 0,
-        crusadePoints: 0,
-        type: "",
-        xp: 0,
-        battlesPlayed: 0,
-        battlesSurvived: 0,
-        enemyUnitsDestroyed: 0,
-        wargear: [],
-        enhancements: [],
-        battleHonours: [],
-        battleScars: [],
-      });
-    }
-  }, [state.success]);
+    if (pending || !state.success) return;
+    router.refresh();
+    setDraft({
+      name: "",
+      modelCount: 0,
+      pointsValue: 0,
+      crusadePoints: 0,
+      type: "",
+      xp: 0,
+      battlesPlayed: 0,
+      battlesSurvived: 0,
+      enemyUnitsDestroyed: 0,
+      wargear: [],
+      enhancements: [],
+      battleHonours: [],
+      battleScars: [],
+    });
+  }, [pending, state.success, state.message, router]);
 
   const wouldExceed =
     supplyLimit > 0 && supplyUsed + Number(draft.pointsValue || 0) > supplyLimit;
@@ -86,6 +88,7 @@ const UnitQuickActions = ({
         setDeleteState(result);
       } else {
         setDeleteState(null);
+        router.refresh();
       }
     });
   };
