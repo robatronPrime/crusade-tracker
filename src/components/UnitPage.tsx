@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import DatasheetPanel from "./DatasheetPanel";
 import ParchmentCard from "./ParchmentCard";
 import StatBlock from "./StatBlock";
 import UnitEditForm from "./UnitEditForm";
@@ -12,6 +13,8 @@ type UnitPageProps = {
   otherUnitsPoints: number;
   edition?: string;
   faction?: string;
+  datasheet?: unknown;
+  datasheetError?: string | null;
 };
 
 const TraitSummary = ({ label, items }: { label: string; items?: UnitWargear[] }) => {
@@ -31,7 +34,16 @@ const TraitSummary = ({ label, items }: { label: string; items?: UnitWargear[] }
   );
 };
 
-const UnitPage = ({ unit, forceId, supplyLimit, otherUnitsPoints, edition, faction }: UnitPageProps) => {
+const UnitPage = ({
+  unit,
+  forceId,
+  supplyLimit,
+  otherUnitsPoints,
+  edition,
+  faction,
+  datasheet = null,
+  datasheetError = null
+}: UnitPageProps) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const traitGroups = [
     { label: "Wargear", items: unit.wargear },
@@ -47,7 +59,6 @@ const UnitPage = ({ unit, forceId, supplyLimit, otherUnitsPoints, edition, facti
           <h3 className="text-lg font-bold mb-2 text-ink/60">Stats</h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6">
-            <StatBlock label="Type" value={unit.type ?? ""} />
             <StatBlock label="XP" value={unit.xp ?? 0} />
             <StatBlock label="Model Count" value={unit.modelCount ?? 0} />
             <StatBlock label="Points Value" value={unit.pointsValue ?? 0} />
@@ -56,6 +67,8 @@ const UnitPage = ({ unit, forceId, supplyLimit, otherUnitsPoints, edition, facti
             <StatBlock label="Battles Survived" value={unit.battlesSurvived ?? 0} />
             <StatBlock label="Enemy Units Destroyed" value={unit.enemyUnitsDestroyed ?? 0} />
           </div>
+
+          <DatasheetPanel datasheet={datasheet} datasheetError={datasheetError} />
 
           {traitGroups.length > 0 ? (
             <div className="flex flex-col gap-2 border-y border-brass/40 py-6">

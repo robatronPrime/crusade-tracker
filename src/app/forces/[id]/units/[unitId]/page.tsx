@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { fetchSiteApi } from "@/lib/fetchSiteApi";
+import { forceHasCodex, isLinkedUnitType } from "@/lib/codex";
 import PageHeader from "@/components/PageHeader";
 import UnitPage from "@/components/UnitPage";
 
@@ -50,6 +51,29 @@ export default async function UnitDetailPage({ params }: PageProps) {
     .filter((u) => String(u.id) !== unit.id)
     .reduce((sum, u) => sum + Number(u.pointsValue ?? 0), 0);
 
+  const edition = String(force.edition ?? "");
+  const faction = String(force.faction ?? "");
+  let datasheet: unknown = null;
+  let datasheetError: string | null = null;
+
+  if (forceHasCodex({ edition, faction }) && isLinkedUnitType(unit.type)) {
+    try {
+      const sheetRes = await fetchSiteApi(
+        `/api/openhammer/units/${encodeURIComponent(unit.type ?? "")}?edition=${encodeURIComponent(edition)}`
+      );
+      if (sheetRes.status === 404) {
+        datasheetError = "datasheet not found";
+      } else if (!sheetRes.ok) {
+        datasheetError = "datasheet unavailable";
+      } else {
+        const payload = await sheetRes.json();
+        datasheet = payload.unit ?? null;
+      }
+    } catch {
+      datasheetError = "datasheet unavailable";
+    }
+  }
+
   return (
     <>
       <PageHeader title={unit.name} backHref="/forces" backLabel="← Orders of Battle" />
@@ -58,8 +82,10 @@ export default async function UnitDetailPage({ params }: PageProps) {
         forceId={mongoForceId}
         supplyLimit={supplyLimit}
         otherUnitsPoints={otherUnitsPoints}
-        edition={force.edition ?? ""}
-        faction={force.faction ?? ""}
+        edition={edition}
+        faction={faction}
+        datasheet={datasheet}
+        datasheetError={datasheetError}
       />
     </>
   );
