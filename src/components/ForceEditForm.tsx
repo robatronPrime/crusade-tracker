@@ -103,7 +103,7 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
     setValues({
       ...values,
       edition: nextEdition,
-      faction: nextEdition === "" ? "" : values.faction,
+      faction: "",
     });
   };
 
