@@ -11,6 +11,8 @@ type UnitQuickActionsProps = {
   supplyLimit: number;
   supplyUsed: number;
   units: Unit[];
+  edition?: string;
+  faction?: string;
 };
 
 function isManagedUnit(unit: Unit): boolean {

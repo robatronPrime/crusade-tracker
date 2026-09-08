@@ -5,6 +5,7 @@ import StatBlock from "./StatBlock";
 import { JSX, useState } from "react";
 import UnitQuickActions from "./UnitQuickActions";
 import ForceDeleteButton from "./ForceDeleteButton";
+import { forceHasCodex } from "@/lib/codex";
 
 interface ForceProps {
   forceProps: Force & { _id?: string };
@@ -38,6 +39,9 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
   return (
     <div className="text-ink">
       <h2 className="font-display text-2xl lg:text-3xl tracking-widest uppercase mb-6">{name}</h2>
+      {forceHasCodex(forceProps) && (
+        <p className="text-sm text-ink/60 mb-4">{forceProps.edition} · {forceProps.faction}</p>
+      )}
 
       <div className="flex flex-wrap gap-8 mb-8 border-b border-brass/40 pb-6">
         <StatBlock label="Battle Tally" value={battleTally ?? 0} />
@@ -71,6 +75,8 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
         supplyLimit={supplyLimit}
         supplyUsed={supplyUsed ?? 0}
         units={units ?? []}
+        edition={forceProps.edition}
+        faction={forceProps.faction}
       />
 
       <div className="mt-8">

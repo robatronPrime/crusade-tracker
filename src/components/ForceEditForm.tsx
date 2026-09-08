@@ -1,10 +1,11 @@
 "use client";
 
-import { ChangeEvent, JSX, useActionState, useMemo, useState } from "react";
+import { ChangeEvent, JSX, useActionState, useEffect, useMemo, useState } from "react";
 import { updateForce } from "@/app/actions";
 import ParchmentCard from "./ParchmentCard";
 import BackBtn from "./BackBtn";
 import Input from "./Input";
+import { isLinkedUnitType } from "@/lib/codex";
 
 type ForceEditFormProps = {
   userId: string;
@@ -17,12 +18,23 @@ type ForceEditFormProps = {
   requisitionPoints: number;
   recordOfAchievement?: string | string[];
   lore?: string;
+  edition: string;
+  faction: string;
 };
+
+type FactionOption = {
+  name: string;
+  faction_type?: string;
+  unit_count?: number;
+};
+
+const selectClassName =
+  "bg-parchment border border-brass text-ink px-3 py-1.5 rounded focus:outline-none focus:ring-2 focus:ring-brass";
 
 const toRecordText = (value: string | string[] | undefined): string =>
   Array.isArray(value) ? value.join("\n") : (value ?? "");
 
-const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore }: ForceEditFormProps): JSX.Element => {
+const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore, edition, faction }: ForceEditFormProps): JSX.Element => {
   const [values, setValues] = useState({
     name: forceName ?? "",
     supplyLimit: supplyLimit,
@@ -32,19 +44,71 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
     requisitionPoints: requisitionPoints,
     recordOfAchievement: toRecordText(recordOfAchievement),
     lore: lore ?? "",
+    edition: edition ?? "",
+    faction: faction ?? "",
   });
+  const [editions, setEditions] = useState<string[]>([]);
+  const [factions, setFactions] = useState<FactionOption[]>([]);
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(updateForce, initialState);
 
+  const locked = units.some((unit) => isLinkedUnitType(unit.type));
 
   const supplyUsed = useMemo(
     () => units.reduce((sum: number, u: Unit) => sum + Number(u.pointsValue || 0), 0),
     [units]
   );
 
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/openhammer/editions")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.editions)) {
+          setEditions(data.editions.map(String));
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (values.edition !== "10e" && values.edition !== "11e") {
+      setFactions([]);
+      return;
+    }
+    let cancelled = false;
+    fetch(`/api/openhammer/factions?edition=${encodeURIComponent(values.edition)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.factions)) {
+          setFactions(data.factions);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [values.edition]);
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
+  };
+
+  const handleEditionChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const nextEdition = e.target.value;
+    setValues({
+      ...values,
+      edition: nextEdition,
+      faction: nextEdition === "" ? "" : values.faction,
+    });
+  };
+
+  const handleFactionChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setValues({ ...values, faction: e.target.value });
   };
 
   return (
@@ -63,6 +127,55 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
                 <div className="col-span-full md:col-span-1">
                   <Input name="name" label="Name" type="text" value={values.name} onChange={handleInputChange} />
                 </div>
+                <div className="col-span-full md:col-span-1">
+                  <label htmlFor="edition" className="flex flex-col gap-1 text-ink">
+                    <span className="text-xs uppercase tracking-widest text-ink/60">Edition</span>
+                    <select
+                      id="edition"
+                      name={locked ? undefined : "edition"}
+                      value={values.edition}
+                      onChange={handleEditionChange}
+                      disabled={locked}
+                      className={selectClassName}
+                    >
+                      <option value=""> </option>
+                      {editions.map((ed) => (
+                        <option key={ed} value={ed}>
+                          {ed}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <div className="col-span-full md:col-span-1">
+                  <label htmlFor="faction" className="flex flex-col gap-1 text-ink">
+                    <span className="text-xs uppercase tracking-widest text-ink/60">Faction</span>
+                    <select
+                      id="faction"
+                      name={locked ? undefined : "faction"}
+                      value={values.faction}
+                      onChange={handleFactionChange}
+                      disabled={locked || (values.edition !== "10e" && values.edition !== "11e")}
+                      className={selectClassName}
+                    >
+                      <option value=""> </option>
+                      {factions.map((f) => (
+                        <option key={f.name} value={f.name}>
+                          {f.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                {locked && (
+                  <p className="col-span-full text-sm text-ink/60">Unlink units before changing edition or faction.</p>
+                )}
+                {locked && (
+                  <>
+                    <input type="hidden" name="edition" value={values.edition} />
+                    <input type="hidden" name="faction" value={values.faction} />
+                  </>
+                )}
                 <div className="col-span-full">
                   <Input name="lore" type="textarea" label="Lore" value={values.lore} onChange={handleInputChange} />
                 </div>
@@ -100,4 +213,4 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
   );
 };
 
-export default ForceEditForm; 
+export default ForceEditForm;

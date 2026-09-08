@@ -35,6 +35,8 @@ export default async function ForcePage({ params }: PageProps) {
           requisitionPoints={force.requisitionPoints}
           recordOfAchievement={force.recordOfAchievement}
           lore={force.lore}
+          edition={force.edition ?? ""}
+          faction={force.faction ?? ""}
         />
       </div>
     </>
