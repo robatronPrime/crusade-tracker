@@ -13,13 +13,6 @@ type UnitEditFormProps = {
   otherUnitsPoints: number;
 };
 
-const emptyTraits = {
-  wargear: [] as UnitWargear[],
-  enhancements: [] as UnitWargear[],
-  battleHonours: [] as UnitWargear[],
-  battleScars: [] as UnitWargear[],
-};
-
 const UnitEditForm = ({
   unit,
   supplyLimit,
