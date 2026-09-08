@@ -1,7 +1,9 @@
+"use client";
+
+import Link from "next/link";
+import StatBlock from "./StatBlock";
 import { JSX, useState } from "react";
 import UnitQuickActions from "./UnitQuickActions";
-import StatBlock from "./StatBlock";
-import Link from "next/link";
 import ForceDeleteButton from "./ForceDeleteButton";
 
 interface ForceProps {
