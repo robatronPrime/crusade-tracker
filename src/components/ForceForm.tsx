@@ -12,44 +12,45 @@ type ForceFormProps = {
 };
 
 type DraftUnit = {
+  xp: number;
   name: string;
+  type: string;
   modelCount: number;
   pointsValue: number;
   crusadePoints: number;
-  type: string;
-  xp: number;
   battlesPlayed: number;
-  battlesSurvived: number;
-  enemyUnitsDestroyed: number;
   wargear: UnitWargear[];
+  battlesSurvived: number;
+  battleScars: UnitWargear[];
+  enemyUnitsDestroyed: number;
   enhancements: UnitWargear[];
   battleHonours: UnitWargear[];
-  battleScars: UnitWargear[];
 };
 
 const defaultDraft: DraftUnit = {
+  xp: 0,
   name: "",
+  type: "",
+  wargear: [],
   modelCount: 0,
   pointsValue: 0,
+  battleScars: [],
+  enhancements: [],
   crusadePoints: 0,
-  type: "",
-  xp: 0,
   battlesPlayed: 0,
+  battleHonours: [],
   battlesSurvived: 0,
   enemyUnitsDestroyed: 0,
-  wargear: [],
-  enhancements: [],
-  battleHonours: [],
-  battleScars: [],
 };
 
 const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
-  const [units, setUnits] = useState<DraftUnit[]>([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [supplyLimit, setSupplyLimit] = useState(0);
+  const [units, setUnits] = useState<DraftUnit[]>([]);
   const [unitDraft, setUnitDraft] = useState<DraftUnit>(defaultDraft);
   const [recordOfAchievement, setRecordOfAchievement] = useState("");
+  const [lore, setLore] = useState("");
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(createForce, initialState);
 
@@ -144,6 +145,7 @@ const ForceForm: React.FC<ForceFormProps> = ({ userId }) => {
             <Input name="battleTally" type="number" label="Battle Tally" />
             <Input name="requisitionPoints" type="number" label="Requisition Points" />
             <Input name="recordOfAchievement" type="textarea" label="Record of Achievements" value={recordOfAchievement} onChange={(e) => setRecordOfAchievement(e.target.value)} />
+            <Input name="lore" type="textarea" label="Lore" value={lore} onChange={(e) => setLore(e.target.value)} />
 
             <input type="hidden" name="units" value={JSON.stringify(units)} />
             <input type="hidden" name="id" value={id} />

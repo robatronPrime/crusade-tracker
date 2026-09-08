@@ -16,12 +16,13 @@ type ForceEditFormProps = {
   battleTally: number;
   requisitionPoints: number;
   recordOfAchievement?: string | string[];
+  lore?: string;
 };
 
 const toRecordText = (value: string | string[] | undefined): string =>
   Array.isArray(value) ? value.join("\n") : (value ?? "");
 
-const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement }: ForceEditFormProps): JSX.Element => {
+const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore }: ForceEditFormProps): JSX.Element => {
   const [values, setValues] = useState({
     name: forceName ?? "",
     supplyLimit: supplyLimit,
@@ -30,6 +31,7 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
     battleTally: battleTally,
     requisitionPoints: requisitionPoints,
     recordOfAchievement: toRecordText(recordOfAchievement),
+    lore: lore ?? "",
   });
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(updateForce, initialState);
@@ -58,9 +60,11 @@ const ForceEditForm = ({ forceId, forceName, userId, units, supplyLimit, victori
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <h3 className="font-display text-2xl lg:text-3xl text-ink tracking-widest uppercase col-span-2">{forceName}</h3>
-
                 <div className="col-span-full md:col-span-1">
                   <Input name="name" label="Name" type="text" value={values.name} onChange={handleInputChange} />
+                </div>
+                <div className="col-span-full">
+                  <Input name="lore" type="textarea" label="Lore" value={values.lore} onChange={handleInputChange} />
                 </div>
                 <div className="col-span-full md:col-span-1">
                     <Input

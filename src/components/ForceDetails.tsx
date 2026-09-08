@@ -1,7 +1,8 @@
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import UnitQuickActions from "./UnitQuickActions";
 import StatBlock from "./StatBlock";
 import Link from "next/link";
+import ForceDeleteButton from "./ForceDeleteButton";
 
 interface ForceProps {
   forceProps: Force & { _id?: string };
@@ -11,6 +12,7 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
   const {
     name,
     victories,
+    lore,
     units,
     supplyUsed,
     supplyLimit,
@@ -18,6 +20,8 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
     requisitionPoints,
     recordOfAchievement,
   } = forceProps;
+
+  const [showLore, setShowLore] = useState(false);
 
   const recordText = Array.isArray(recordOfAchievement)
     ? recordOfAchievement.join("\n")
@@ -43,6 +47,23 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
         </Link>
       </div>
 
+      <div className="mb-8">
+        <div className="flex justify-between md:flex-col md:justify-start md:items-start border-b border-brass/40 pb-6">
+          <h3 className="text-lg font-bold mb-2 text-ink/60">Lore</h3>
+          <button className="text-brass text-xs underline hover:text-brass-hover ml-4 md:ml-0" onClick={() => setShowLore(!showLore)}>{showLore ? "Hide Lore" : "Show Lore"}</button>
+          
+          {showLore && (
+            <div className="text-ink text-sm whitespace-pre-wrap mt-4">
+              {!lore?.trim() ? (
+                <p className="text-ink/50 text-sm">No lore recorded.</p>
+              ) : (
+                <p className="text-ink text-sm whitespace-pre-wrap italic">{lore}</p>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
       <UnitQuickActions
         forceId={forceId}
         supplyLimit={supplyLimit}
@@ -61,6 +82,10 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
             ))}
           </ul>
         )}
+      </div>
+
+      <div className="mt-10">
+        <ForceDeleteButton forceId={forceId} forceName={name} />
       </div>
     </div>
   );

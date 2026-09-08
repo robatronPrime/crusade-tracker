@@ -33,6 +33,7 @@ export default async function UnitDetailPage({ params }: PageProps) {
     enhancements: Array.isArray(rawUnit.enhancements) ? rawUnit.enhancements : [],
     battleHonours: Array.isArray(rawUnit.battleHonours) ? rawUnit.battleHonours : [],
     battleScars: Array.isArray(rawUnit.battleScars) ? rawUnit.battleScars : [],
+    lore: rawUnit.lore ?? "",
   };
 
   const mongoForceId = String(rawUnit.forceId ?? forceId);

@@ -4,6 +4,7 @@ import { updateUnit } from "@/app/actions";
 import ParchmentCard from "@/components/ParchmentCard";
 import { ChangeEvent, useActionState, useState } from "react";
 import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
+import Input from "./Input";
 
 type UnitEditFormProps = {
   unit: Unit;
@@ -24,20 +25,8 @@ const UnitEditForm = ({
   supplyLimit,
   otherUnitsPoints,
 }: UnitEditFormProps) => {
-  const [values, setValues] = useState({
-    name: unit.name ?? "",
-    modelCount: unit.modelCount ?? 0,
-    pointsValue: unit.pointsValue ?? 0,
-    crusadePoints: unit.crusadePoints ?? 0,
-    xp: unit.xp ?? 0,
-    battlesPlayed: unit.battlesPlayed ?? 0,
-    battlesSurvived: unit.battlesSurvived ?? 0,
-    enemyUnitsDestroyed: unit.enemyUnitsDestroyed ?? 0,
-    type: unit.type ?? "",
-    wargear: unit.wargear ?? emptyTraits.wargear,
-    enhancements: unit.enhancements ?? emptyTraits.enhancements,
-    battleHonours: unit.battleHonours ?? emptyTraits.battleHonours,
-    battleScars: unit.battleScars ?? emptyTraits.battleScars,
+  const [values, setValues] = useState<Partial<Unit>>({
+    ...unit,
   });
   const initialState: CreateFormState = { message: "", success: false };
   const [state, formAction, pending] = useActionState(updateUnit, initialState);
@@ -102,10 +91,22 @@ const UnitEditForm = ({
                 New points value would exceed the supply limit.
               </p>
             )}
+
+            <h3 className="font-display text-lg uppercase tracking-widest text-ink border-b border-brass/40 pb-2">
+              Lore
+            </h3>
+            <Input
+              name="lore"
+              type="textarea"
+              label="Transcribed Lore"
+              value={values.lore ?? ""}
+              onChange={onChange}
+            />
+            
             <button
               type="submit"
               className="inline-block bg-brass text-ink font-bold px-5 py-2 rounded uppercase tracking-widest text-sm hover:bg-brass-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={pending || wouldExceed || !values.name.trim()}
+              disabled={pending || wouldExceed || !values.name?.trim() || !values.lore?.trim()}
             >
               Save
             </button>

@@ -28,6 +28,7 @@ export const forceSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   userId: z.string().min(1),
+  lore: z.string().optional(),
   victories: z.number().int().nonnegative().optional(),
   units: z.array(forceUnitSchema).optional(),
   supplyLimit: z.number().int().nonnegative().optional(),
@@ -51,6 +52,7 @@ export const addUnitSchema = z.object({
   enhancements: unitTraitListSchema.optional(),
   battleHonours: unitTraitListSchema.optional(),
   battleScars: unitTraitListSchema.optional(),
+  lore: z.string().optional(),
 });
 
 export const updateUnitSchema = z.object({
@@ -68,4 +70,5 @@ export const updateUnitSchema = z.object({
   enhancements: unitTraitListSchema.optional(),
   battleHonours: unitTraitListSchema.optional(),
   battleScars: unitTraitListSchema.optional(),
+  lore: z.string().optional(),
 });
