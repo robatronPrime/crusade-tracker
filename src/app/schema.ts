@@ -35,6 +35,8 @@ export const forceSchema = z.object({
   battleTally: z.number().int().nonnegative().optional(),
   requisitionPoints: z.number().int().nonnegative().optional(),
   recordOfAchievement: z.string().optional(),
+  edition: z.enum(["", "10e", "11e"]).optional(),
+  faction: z.string().optional(),
 });
 
 export const addUnitSchema = z.object({

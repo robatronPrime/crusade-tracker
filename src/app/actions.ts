@@ -300,13 +300,15 @@ export async function updateForce(
     requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
     lore: formString(formData, "lore"),
     recordOfAchievement: formString(formData, "recordOfAchievement"),
+    edition: formString(formData, "edition"),
+    faction: formString(formData, "faction"),
   });
 
   if (!validated.success) {
     return { success: false, message: "Validation failed." };
   }
 
-  const { id, name, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore } =
+  const { id, name, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore, edition, faction } =
     validated.data;
 
   try {
@@ -321,6 +323,8 @@ export async function updateForce(
         requisitionPoints,
         lore,
         recordOfAchievement: recordOfAchievement ?? "",
+        edition,
+        faction,
       }),
     });
 
@@ -335,6 +339,9 @@ export async function updateForce(
     }
 
     if (!response.ok) {
+      if (response.status === 409) {
+        return { success: false, message: data?.error ?? "Unlink units before changing edition or faction" };
+      }
       if (data?.error === "Supply limit exceeded") {
         return {
           success: false,

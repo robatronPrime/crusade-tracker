@@ -10,6 +10,8 @@ type Force = {
   battleTally: number;
   requisitionPoints: number;
   recordOfAchievement: string | string[];
+  edition?: string;
+  faction?: string;
 };
 
 type CrusadeUser = {
