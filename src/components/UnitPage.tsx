@@ -42,24 +42,37 @@ const UnitPage = ({ unit, forceId, supplyLimit, otherUnitsPoints }: UnitPageProp
     <div className="col-span-12">
       <ParchmentCard>
         <div className="flex flex-col gap-8">
+          <h3 className="text-lg font-bold mb-2 text-ink/60">Stats</h3>
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6">
+            <StatBlock label="Type" value={unit.type ?? ""} />
+            <StatBlock label="XP" value={unit.xp ?? 0} />
             <StatBlock label="Model Count" value={unit.modelCount ?? 0} />
             <StatBlock label="Points Value" value={unit.pointsValue ?? 0} />
             <StatBlock label="Crusade Points" value={unit.crusadePoints ?? 0} />
-            <StatBlock label="XP" value={unit.xp ?? 0} />
             <StatBlock label="Battles Played" value={unit.battlesPlayed ?? 0} />
             <StatBlock label="Battles Survived" value={unit.battlesSurvived ?? 0} />
             <StatBlock label="Enemy Units Destroyed" value={unit.enemyUnitsDestroyed ?? 0} />
-            <StatBlock label="Type" value={unit.type ?? ""} />
           </div>
 
           {traitGroups.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 pt-6 border-t border-brass/40">
+            <div className="flex flex-col gap-2 border-y border-brass/40 py-6">
+              <h3 className="text-lg font-bold mb-2 text-ink/60">Traits</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
               {traitGroups.map((group) => (
-                <TraitSummary key={group.label} label={group.label} items={group.items} />
-              ))}
+                  <TraitSummary key={group.label} label={group.label} items={group.items} />
+                ))}
+              </div>
             </div>
           ) : null}
+
+          <div className="col-span-full">
+            {!unit.lore?.trim() ? (
+              <p className="text-ink text-sm">No lore recorded.</p>
+            ) : (
+              <p className="text-ink text-sm whitespace-pre-wrap italic">{unit.lore}</p>
+            )}
+          </div>
 
           <button
             className="self-start bg-brass text-black px-4 py-2 rounded-md hover:bg-brass-hover"

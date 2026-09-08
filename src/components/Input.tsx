@@ -19,7 +19,7 @@ const Input = ({ name, type, label, value, onChange }: InputProps): JSX.Element 
           name={name}
           value={value}
           onChange={onChange}
-          className="bg-parchment border border-brass text-ink px-3 py-1.5 rounded focus:outline-none focus:ring-2 focus:ring-brass"
+          className="bg-parchment border border-brass text-ink px-3 py-1.5 rounded min-h-28 focus:outline-none focus:ring-2 focus:ring-brass"
         />
       ) : (
         <input

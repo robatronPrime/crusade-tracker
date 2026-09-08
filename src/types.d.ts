@@ -3,19 +3,20 @@ type Force = {
   name: string;
   userId: string;
   victories: number;
+  lore: string;
   units: Unit[];
   supplyUsed: number;
   supplyLimit: number;
   battleTally: number;
   requisitionPoints: number;
   recordOfAchievement: string | string[];
-}
+};
 
 type CrusadeUser = {
   _id: string;
   forces: Force[];
   clerkID: string;
-}
+};
 
 type UnitWargear = {
   name: string;
@@ -39,17 +40,18 @@ type Unit = {
   battleHonours?: UnitWargear[];
   battleScars?: UnitWargear[];
   type?: string;
+  lore?: string;
 };
 
 type UserForceRef = {
   forceRef: number;
-}
+};
 
 type User = {
   clerkID: string;
   userName: string;
   forces: UserForceRef[];
-}
+};
 
 type apiResponse<T> = {
   data: T | null;
@@ -61,4 +63,4 @@ type apiResponse<T> = {
 type CreateFormState = {
   message: string;
   success: boolean;
-}
+};

@@ -84,6 +84,7 @@ export async function createForce(
     name: formData.get("name"),
     units: unitsCheck.data,
     userId: formData.get("userId"),
+    lore: formString(formData, "lore"),
     victories: Number(formData.get("victories")) || 0,
     battleTally: Number(formData.get("battleTally")) || 0,
     requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
@@ -129,9 +130,7 @@ export async function addUnit(
   const enhancements = parseTraitList(formData.get("enhancements"));
   const battleHonours = parseTraitList(formData.get("battleHonours"));
   const battleScars = parseTraitList(formData.get("battleScars"));
-  if (wargear === null || enhancements === null || battleHonours === null || battleScars === null) {
-    return { success: false, message: "Invalid unit traits payload." };
-  }
+  const lore = formString(formData, "lore");
 
   const validated = addUnitSchema.safeParse({
     forceId: formData.get("forceId"),
@@ -148,6 +147,7 @@ export async function addUnit(
     enhancements,
     battleHonours,
     battleScars,
+    lore,
   });
 
   if (!validated.success) {
@@ -188,9 +188,7 @@ export async function updateUnit(
   const enhancements = parseTraitList(formData.get("enhancements"));
   const battleHonours = parseTraitList(formData.get("battleHonours"));
   const battleScars = parseTraitList(formData.get("battleScars"));
-  if (wargear === null || enhancements === null || battleHonours === null || battleScars === null) {
-    return { success: false, message: "Invalid unit traits payload." };
-  }
+  const lore = formString(formData, "lore");
 
   const validated = updateUnitSchema.safeParse({
     id: formData.get("id"),
@@ -207,6 +205,7 @@ export async function updateUnit(
     enhancements,
     battleHonours,
     battleScars,
+    lore,
   });
 
   if (!validated.success) {
@@ -299,6 +298,7 @@ export async function updateForce(
     victories: Number(formData.get("victories")) || 0,
     battleTally: Number(formData.get("battleTally")) || 0,
     requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
+    lore: formString(formData, "lore"),
     recordOfAchievement: formString(formData, "recordOfAchievement"),
   });
 
@@ -306,7 +306,7 @@ export async function updateForce(
     return { success: false, message: "Validation failed." };
   }
 
-  const { id, name, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement } =
+  const { id, name, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore } =
     validated.data;
 
   try {
@@ -319,6 +319,7 @@ export async function updateForce(
         victories,
         battleTally,
         requisitionPoints,
+        lore,
         recordOfAchievement: recordOfAchievement ?? "",
       }),
     });
@@ -344,6 +345,7 @@ export async function updateForce(
     }
 
     revalidatePath("/forces");
+    revalidatePath(`/forces/${id}`);
     revalidatePath(`/forces/${id}/edit`);
     return { success: true, message: "Force updated." };
   } catch (error) {

@@ -5,6 +5,7 @@ export async function proxyToApi(path: string, init: RequestInit = {}): Promise<
   const { getToken } = await auth();
   const token = await getToken();
   if (!token) {
+    console.error(`proxyToApi: no Clerk session token for ${path}`);
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "content-type": "application/json" },
@@ -32,6 +33,10 @@ export async function proxyToApi(path: string, init: RequestInit = {}): Promise<
       } catch {
         body = JSON.stringify({ error: text });
       }
+    }
+
+    if (upstream.status === 401 || upstream.status === 500) {
+      console.error(`proxyToApi: upstream ${upstream.status} for ${path}`);
     }
 
     return new Response(body, {
