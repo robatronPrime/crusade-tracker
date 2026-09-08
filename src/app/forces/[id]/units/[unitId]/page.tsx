@@ -53,7 +53,14 @@ export default async function UnitDetailPage({ params }: PageProps) {
   return (
     <>
       <PageHeader title={unit.name} backHref="/forces" backLabel="← Orders of Battle" />
-      <UnitPage unit={unit} forceId={mongoForceId} supplyLimit={supplyLimit} otherUnitsPoints={otherUnitsPoints} />
+      <UnitPage
+        unit={unit}
+        forceId={mongoForceId}
+        supplyLimit={supplyLimit}
+        otherUnitsPoints={otherUnitsPoints}
+        edition={force.edition ?? ""}
+        faction={force.faction ?? ""}
+      />
     </>
   );
 }

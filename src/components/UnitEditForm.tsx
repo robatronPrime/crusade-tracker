@@ -2,6 +2,8 @@
 
 import { updateUnit } from "@/app/actions";
 import ParchmentCard from "@/components/ParchmentCard";
+import { applyDatasheetOverwrite, forceHasCodex } from "@/lib/codex";
+import type { OpenHammerUnitSummary } from "@/lib/openhammer";
 import { ChangeEvent, useActionState, useState } from "react";
 import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
 import Input from "./Input";
@@ -11,12 +13,16 @@ type UnitEditFormProps = {
   forceId: string;
   supplyLimit: number;
   otherUnitsPoints: number;
+  edition?: string;
+  faction?: string;
 };
 
 const UnitEditForm = ({
   unit,
   supplyLimit,
   otherUnitsPoints,
+  edition = "",
+  faction = ""
 }: UnitEditFormProps) => {
   const [values, setValues] = useState<Partial<Unit>>({
     ...unit,
@@ -68,6 +74,13 @@ const UnitEditForm = ({
               values={values}
               onChange={onChange}
               onTraitsChange={onTraitsChange}
+              hasCodex={forceHasCodex({ edition, faction })}
+              edition={edition}
+              faction={faction}
+              onDatasheetLinked={(sheet: OpenHammerUnitSummary) =>
+                setValues((v) => applyDatasheetOverwrite(v, sheet))
+              }
+              onDatasheetUnlink={() => setValues((v) => ({ ...v, type: "" }))}
             />
           </div>
 

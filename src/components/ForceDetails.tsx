@@ -75,8 +75,8 @@ const ForceDetails = ({ forceProps }: ForceProps): JSX.Element => {
         supplyLimit={supplyLimit}
         supplyUsed={supplyUsed ?? 0}
         units={units ?? []}
-        edition={forceProps.edition}
-        faction={forceProps.faction}
+        edition={forceProps.edition ?? ""}
+        faction={forceProps.faction ?? ""}
       />
 
       <div className="mt-8">

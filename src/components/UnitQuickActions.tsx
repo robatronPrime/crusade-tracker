@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useActionState, useEffect, useState, useTransition } from "react";
 import { addUnit, deleteUnit } from "@/app/actions";
+import { applyDatasheetOverwrite, forceHasCodex } from "@/lib/codex";
+import type { OpenHammerUnitSummary } from "@/lib/openhammer";
 import UnitFormFields, { UnitTraitKey } from "./UnitFormFields";
 
 type UnitQuickActionsProps = {
@@ -25,6 +27,8 @@ const UnitQuickActions = ({
   supplyLimit,
   supplyUsed,
   units,
+  edition = "",
+  faction = ""
 }: UnitQuickActionsProps) => {
   const [draft, setDraft] = useState({
     name: "",
@@ -184,7 +188,19 @@ const UnitQuickActions = ({
           </div>
         )}
         <input type="hidden" name="forceId" value={forceId} />
-        <UnitFormFields mode="quickAdd" values={draft} onChange={onChange} onTraitsChange={onTraitsChange} />
+        <UnitFormFields
+          mode="quickAdd"
+          values={draft}
+          onChange={onChange}
+          onTraitsChange={onTraitsChange}
+          hasCodex={forceHasCodex({ edition, faction })}
+          edition={edition}
+          faction={faction}
+          onDatasheetLinked={(sheet: OpenHammerUnitSummary) =>
+            setDraft((d) => applyDatasheetOverwrite(d, sheet))
+          }
+          onDatasheetUnlink={() => setDraft((d) => ({ ...d, type: "" }))}
+        />
         {wouldExceed && (
           <p className="col-span-12 text-danger text-sm">
             Adding this unit would exceed the supply limit.

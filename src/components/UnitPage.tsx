@@ -10,6 +10,8 @@ type UnitPageProps = {
   forceId: string;
   supplyLimit: number;
   otherUnitsPoints: number;
+  edition?: string;
+  faction?: string;
 };
 
 const TraitSummary = ({ label, items }: { label: string; items?: UnitWargear[] }) => {
@@ -29,7 +31,7 @@ const TraitSummary = ({ label, items }: { label: string; items?: UnitWargear[] }
   );
 };
 
-const UnitPage = ({ unit, forceId, supplyLimit, otherUnitsPoints }: UnitPageProps) => {
+const UnitPage = ({ unit, forceId, supplyLimit, otherUnitsPoints, edition, faction }: UnitPageProps) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const traitGroups = [
     { label: "Wargear", items: unit.wargear },
@@ -89,6 +91,8 @@ const UnitPage = ({ unit, forceId, supplyLimit, otherUnitsPoints }: UnitPageProp
             forceId={forceId}
             supplyLimit={supplyLimit}
             otherUnitsPoints={otherUnitsPoints}
+            edition={edition}
+            faction={faction}
           />
         )}
       </div>

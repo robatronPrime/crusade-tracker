@@ -1,6 +1,8 @@
 "use client";
 
 import { ChangeEvent, JSX } from "react";
+import type { OpenHammerUnitSummary } from "@/lib/openhammer";
+import DatasheetPicker from "./DatasheetPicker";
 import Input from "./Input";
 import TraitListEditor from "./TraitListEditor";
 
@@ -12,13 +14,18 @@ type UnitFormFieldsProps = {
   values: Partial<Unit>;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onTraitsChange: (key: UnitTraitKey, items: UnitWargear[]) => void;
+  hasCodex?: boolean;
+  edition?: string;
+  faction?: string;
+  onDatasheetLinked?: (sheet: OpenHammerUnitSummary) => void;
+  onDatasheetUnlink?: () => void;
 };
 
 const traitFields: { key: UnitTraitKey; label: string }[] = [
   { key: "wargear", label: "Wargear" },
   { key: "enhancements", label: "Enhancements" },
   { key: "battleHonours", label: "Battle Honours" },
-  { key: "battleScars", label: "Battle Scars" },
+  { key: "battleScars", label: "Battle Scars" }
 ];
 
 const traitHiddenInputs = (values: Partial<Unit>) =>
@@ -26,12 +33,39 @@ const traitHiddenInputs = (values: Partial<Unit>) =>
     <input key={`hidden-${key}`} type="hidden" name={key} value={JSON.stringify(values[key] ?? [])} />
   ));
 
-const UnitFormFields = ({ mode, values, onChange, onTraitsChange }: UnitFormFieldsProps): JSX.Element => {
+const UnitFormFields = ({
+  mode,
+  values,
+  onChange,
+  onTraitsChange,
+  hasCodex,
+  edition,
+  faction,
+  onDatasheetLinked,
+  onDatasheetUnlink
+}: UnitFormFieldsProps): JSX.Element => {
   const showCrusadePoints = mode === "create" || mode === "fullEdit";
+  const typeControls = (
+    <>
+      {hasCodex ? (
+        <div className="col-span-12">
+          <DatasheetPicker
+            edition={edition ?? ""}
+            faction={faction ?? ""}
+            typeValue={values.type ?? ""}
+            onLinked={(sheet) => onDatasheetLinked?.(sheet)}
+            onUnlink={() => onDatasheetUnlink?.()}
+          />
+        </div>
+      ) : null}
+      <input type="hidden" name="type" value={hasCodex ? (values.type ?? "") : ""} />
+    </>
+  );
 
   if (mode === "quickAdd") {
     return (
       <>
+        {typeControls}
         <div className="col-span-12 sm:col-span-6 lg:col-span-5">
           <Input name="name" type="text" label="Unit Name" value={values.name ?? ""} onChange={onChange} />
         </div>
@@ -48,6 +82,7 @@ const UnitFormFields = ({ mode, values, onChange, onTraitsChange }: UnitFormFiel
 
   return (
     <div className="col-span-12 grid grid-cols-12 gap-4">
+      {typeControls}
       <div className="col-span-12 lg:col-span-3">
         <Input
           name="name"
@@ -115,9 +150,6 @@ const UnitFormFields = ({ mode, values, onChange, onTraitsChange }: UnitFormFiel
           value={values.enemyUnitsDestroyed ?? 0}
           onChange={onChange}
         />
-      </div>
-      <div className="col-span-6 lg:col-span-2">
-        <Input name="type" type="text" label="Type" value={values.type ?? ""} onChange={onChange} />
       </div>
       {traitFields.map(({ key, label }) => (
         <TraitListEditor
