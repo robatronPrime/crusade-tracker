@@ -293,23 +293,23 @@ export async function updateForce(
   const validated = forceSchema.safeParse({
     id: formData.get("id"),
     name: formData.get("name"),
-    supplyLimit: Number(formData.get("supplyLimit")) || 0,
     userId: formData.get("userId"),
-    victories: Number(formData.get("victories")) || 0,
-    battleTally: Number(formData.get("battleTally")) || 0,
-    requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
     lore: formString(formData, "lore"),
-    recordOfAchievement: formString(formData, "recordOfAchievement"),
     edition: formString(formData, "edition"),
     faction: formString(formData, "faction"),
+    victories: Number(formData.get("victories")) || 0,
+    battleTally: Number(formData.get("battleTally")) || 0,
+    supplyLimit: Number(formData.get("supplyLimit")) || 0,
+    recordOfAchievement: formString(formData, "recordOfAchievement"),
+    requisitionPoints: Number(formData.get("requisitionPoints")) || 0,
   });
 
   if (!validated.success) {
     return { success: false, message: "Validation failed." };
   }
 
-  const { id, name, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore, edition, faction } =
-    validated.data;
+  const { id, name, supplyLimit, victories, battleTally, requisitionPoints, recordOfAchievement, lore, edition, faction } = validated.data;
+  console.log(edition, faction);
 
   try {
     const response = await fetchSiteApi(`/api/forces/${id}`, {
